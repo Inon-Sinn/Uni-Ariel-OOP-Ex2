@@ -58,4 +58,8 @@ public class Node implements api.NodeData {
         // is valid?
         this.tag = tag;
     }
+    public void setKey(int key){
+        this.key = key;
+
+    }
 }

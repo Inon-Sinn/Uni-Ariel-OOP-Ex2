@@ -9,15 +9,18 @@ import java.util.Iterator;
 
 // This class represents The Directed Weighted Graph
 public class DWG implements api.DirectedWeightedGraph {
-    int size;
-    HashMap<Integer,Node> nodes;
-
+    int size,nextKey;
+    Nodes nodes;
+    Edges edges;
     // create new Directed Weighted Graph
-    // idea- create an Hashmap for the nodes, each node has an id
-    // so we can get node with O(1)
+    // create hashmap with key source, and value of another hashmap.
+    // each key represents a single node and the hashmap for this node represents the nodes connected to him
+
     public DWG(){
-        size = 0;
-        nodes = new HashMap<Integer,Node>();
+        size = 0;nextKey = 0;
+        this.nodes = new Nodes();
+        this.edges = new Edges();
+
     }
     @Override
     public NodeData getNode(int key) {
@@ -32,18 +35,41 @@ public class DWG implements api.DirectedWeightedGraph {
 
     @Override
     public EdgeData getEdge(int src, int dest) {
-
-        return null;
+        return this.edges.get(new Tuple(src,dest));
     }
-
     @Override
     public void addNode(NodeData n) {
-
+        Node node = new Node();
+        node.setInfo(n.getInfo());
+        node.setLocation(n.getLocation());
+        node.setTag(n.getTag());
+        node.setWeight(n.getWeight());
+        node.setKey(this.nextKey++);
+        Integer k = Integer.valueOf(this.nextKey);
+        this.nodes.put(k,node);
     }
 
     @Override
     public void connect(int src, int dest, double w) {
+        // check if both nodes are inside the graph.
 
+        // if at least one is not inside the graph then do nothing
+        if ( !(this.nodes.containsKey(Integer.valueOf(src)) &&
+                this.nodes.containsKey(Integer.valueOf(dest)))){
+            return;
+        }
+        // else connect them together
+        else {
+            Tuple tuple = new Tuple(src, dest);
+            Edge edge = new Edge();
+            edge.setEdge(tuple);
+            // edit info and tag, unclear use
+            edge.setInfo("xd");
+            edge.setTag(-1);
+
+            edge.setWeight(w);
+            this.edges.put(tuple, edge);
+        }
     }
 
     @Override

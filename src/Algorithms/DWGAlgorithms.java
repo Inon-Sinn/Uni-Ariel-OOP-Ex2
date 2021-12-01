@@ -6,7 +6,7 @@ import api.NodeData;
 
 import java.util.List;
 
-public class DWGAlgorithms implements DirectedWeightedGraphAlgorithms {
+public class DWGAlgorithms implements api.DirectedWeightedGraphAlgorithms {
     @Override
     public void init(DirectedWeightedGraph g) {
 

@@ -1,20 +1,20 @@
 package Classes;
 
 import api.EdgeData;
-
 // This class represents a single edge between two nodes in the graph
 public class Edge implements api.EdgeData {
-    private int src,dest,tag;
+    private int tag;
+    private Tuple edge;
     private double weight;
     private String info;
     @Override
     public int getSrc() {
-        return this.src;
+        return this.edge.getSrc();
     }
 
     @Override
     public int getDest() {
-        return this.dest;
+        return this.edge.getDest();
     }
 
     @Override
@@ -43,8 +43,12 @@ public class Edge implements api.EdgeData {
         // is valid?
         this.tag = t;
     }
-    public void setWeight(int w){
+    public void setWeight(double w){
         // is valid?
         this.weight = w;
+    }
+
+    public void setEdge(Tuple edge) {
+        this.edge = edge;
     }
 }
