@@ -1,6 +1,10 @@
-package api;
+package Classes;
 
-public class Node implements NodeData{
+import api.GeoLocation;
+import api.NodeData;
+
+// this class represents a single Node in the graph
+public class Node implements api.NodeData {
     private int key,tag;
     private double weight;
     private String info;

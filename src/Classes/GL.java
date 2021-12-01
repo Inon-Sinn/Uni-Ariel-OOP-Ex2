@@ -1,6 +1,9 @@
-package api;
+package Classes;
 
-public class GL implements GeoLocation{
+import api.GeoLocation;
+
+// this is basic implementation of GeoLocation
+public class GL implements api.GeoLocation {
     double x,y,z;
 
     public GL(double x, double y, double z){

@@ -1,16 +1,38 @@
-package api;
+package Classes;
 
+import api.DirectedWeightedGraph;
+import api.EdgeData;
+import api.NodeData;
+
+import java.util.HashMap;
 import java.util.Iterator;
 
-public class DWG implements DirectedWeightedGraph{
+// This class represents The Directed Weighted Graph
+public class DWG implements api.DirectedWeightedGraph {
+    int size;
+    HashMap<Integer,Node> nodes;
 
+    // create new Directed Weighted Graph
+    // idea- create an Hashmap for the nodes, each node has an id
+    // so we can get node with O(1)
+    public DWG(){
+        size = 0;
+        nodes = new HashMap<Integer,Node>();
+    }
     @Override
     public NodeData getNode(int key) {
-        return null;
+        if(nodes.containsKey(key)){
+            return nodes.get(key);
+        }
+        else{
+            // there is no such node
+            return null;
+        }
     }
 
     @Override
     public EdgeData getEdge(int src, int dest) {
+
         return null;
     }
 

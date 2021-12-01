@@ -1,6 +1,9 @@
-package api;
+package Classes;
 
-public class Edge implements EdgeData{
+import api.EdgeData;
+
+// This class represents a single edge between two nodes in the graph
+public class Edge implements api.EdgeData {
     private int src,dest,tag;
     private double weight;
     private String info;

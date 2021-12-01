@@ -1,8 +1,12 @@
-package api;
+package Algorithms;
+
+import api.DirectedWeightedGraph;
+import api.DirectedWeightedGraphAlgorithms;
+import api.NodeData;
 
 import java.util.List;
 
-public class DWGAlgorithms implements DirectedWeightedGraphAlgorithms{
+public class DWGAlgorithms implements DirectedWeightedGraphAlgorithms {
     @Override
     public void init(DirectedWeightedGraph g) {
 
