@@ -1,10 +1,9 @@
 package Classes;
 
-import api.DirectedWeightedGraph;
 import api.EdgeData;
 import api.NodeData;
 
-import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.Iterator;
 
 // This class represents The Directed Weighted Graph
@@ -73,39 +72,53 @@ public class DWG implements api.DirectedWeightedGraph {
     }
 
     @Override
-    public Iterator<NodeData> nodeIter() {
-        return null;
-    }
+    public Iterator<NodeData> nodeIter() { return this.nodes.itr; }
 
     @Override
-    public Iterator<EdgeData> edgeIter() {
-        return null;
-    }
+    public Iterator<EdgeData> edgeIter() { return this.edges.itr; }
 
     @Override
     public Iterator<EdgeData> edgeIter(int node_id) {
-        return null;
+        ArrayList <EdgeData> a = new ArrayList<EdgeData>();
+        for (int i = 0; i < this.edges.size(); i++) {
+            if(edges.get(i).getDest() == node_id|| edges.get(i).getSrc() == node_id){
+                a.add(edges.get(i));
+            }
+        }
+        return a.iterator();
     }
 
     @Override
     public NodeData removeNode(int key) {
-        return null;
+        Node removed = nodes.get(key);
+        nodes.remove(key);
+        for (int i = 0; i < edges.size(); i++) {
+            if(edges.get(i).getDest() == key || edges.get(i).getSrc() == key){
+                edges.remove(i);
+            }
+        }
+        return removed;
     }
 
     @Override
-    public EdgeData removeEdge(int src, int dest) {
+    public EdgeData removeEdge(int src, int dest) { //O(number of edges) - need to fix
+        for (int i = 0; i < edges.size(); i++) {
+            if(edges.get(i).getSrc() == src && edges.get(i).getDest() == dest){
+                Edge removed = edges.get(i);
+                edges.remove(i);
+                return removed;
+            }
+        }
         return null;
     }
 
     @Override
     public int nodeSize() {
-        return 0;
+        return nodes.size();
     }
 
     @Override
-    public int edgeSize() {
-        return 0;
-    }
+    public int edgeSize() { return edges.size(); }
 
     @Override
     public int getMC() {
