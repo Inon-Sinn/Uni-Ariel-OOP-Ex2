@@ -1,5 +1,6 @@
 package Classes;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 
@@ -7,10 +8,13 @@ import java.util.HashMap;
 public class NodeData implements api.NodeData {
 
     private int id;
-    private double weight = 0; //default 0
     private GeoLoc pos;
+
     private HashMap<Integer, api.EdgeData> edgesConnected;
+    private ArrayList<Integer> pointing_to_me = new ArrayList<>(); //todo check it doesnt make problems
+
     private String info;
+    private double weight = 0; //default 0
     private int tag = 0; //default 0
 
     public NodeData(int id, GeoLoc pos){
@@ -74,7 +78,12 @@ public class NodeData implements api.NodeData {
         return this.edgesConnected.get(dest);
     }
 
-    public Collection<api.EdgeData> getConnectedEdgeCollection(){
+    //Possible to return the edge
+    public void removeEdge(int dest){
+        edgesConnected.remove(dest);
+    }
+
+    public Collection<api.EdgeData> getEdgeCollection(){
         return this.edgesConnected.values();
     }
 
@@ -83,9 +92,33 @@ public class NodeData implements api.NodeData {
         this.id = key;
     }
 
+    /**
+     * Adds an edge to the hashmaps of all edges
+     * @param edgeData api.EdgeData - the edge to add
+     */
     public void addEdge(api.EdgeData edgeData){
         EdgeData e = (EdgeData) edgeData;
         this.edgesConnected.put(e.getDest(),e);
+    }
+
+    /**
+     * Return an Array with all nodes for which have a edge with this node as the destination
+     * @return ArrayList<Integer>
+     */
+    public ArrayList<Integer> getPointers(){
+        return this.pointing_to_me;
+    }
+
+    /**
+     * When a node gets an edge which points to this node it will add it to the list of nodes which point to this node
+     * @param src int - the id  of the node which get an edge to this node
+     */
+    public void addPointer(int src){
+        this.pointing_to_me.add(src);
+    }
+
+    public void removePoiner(int src){
+        this.pointing_to_me.remove((Integer)src);//TODO check it removes the object and not the placement
     }
 
 }

@@ -43,6 +43,7 @@ public class DWG implements api.DirectedWeightedGraph {
     public void addNode(api.NodeData n) {
         Integer k = this.nextKeyNode++; // TODO check potential bug cuz no cast from interface used
         this.nodes.put(k,n);
+        this.mc++;
     }
 
     @Override
@@ -80,27 +81,46 @@ public class DWG implements api.DirectedWeightedGraph {
 
     @Override
     public Iterator<api.EdgeData> edgeIter(int node_id) {
-       NodeData l = null;
-       l = (NodeData) nodes.get(node_id);
-       return l.getConnectedEdgeCollection().iterator();
+       NodeData l = (NodeData) nodes.get(node_id);
+       return l.getEdgeCollection().iterator();
     }
 
     @Override
     public api.NodeData removeNode(int key) {
         NodeData removed = (NodeData) nodes.get(key);
+        Iterator it = edgeIter(key);
         nodes.remove(key);
-        for (int i = 0; i < edges.size(); i++) {
-            if(edges.get(i).getDest() == key || edges.get(i).getSrc() == key){
-                edges.remove(i);
-            }
+        // remove the edges going out from this node
+        while(it.hasNext()){
+            it.next();
+            int dest = ((EdgeData)it).getDest();
+            edges.remove(getEdgeId(key,dest));
+            NodeData curr = (NodeData)getNode(dest);
+            curr.removePoiner(key);
         }
+        // remove the edges going to this node
+        for (int i = 0; i < removed.getPointers().size(); i++) {
+            int node_id = removed.getPointers().get(i);
+            NodeData curr = (NodeData)getNode(node_id);
+            curr.removeEdge(key);
+            edges.remove(getEdgeId(node_id,key));
+        }
+        this.mc++;
         return removed;
+        // TOO long
+//        for (int i = 0; i < edges.size(); i++) {
+//            if(edges.get(i).getDest() == key || edges.get(i).getSrc() == key){
+//                edges.remove(i);
+//            }
+//        }
+
     }
 
     @Override
     public api.EdgeData removeEdge(int src, int dest) { // O(1)
         int id = getEdgeId(src,dest);
         EdgeData edgeData = (EdgeData) edges.remove(id);
+        //TODO not removed from node
         return edgeData;
     }
 
