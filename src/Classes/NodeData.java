@@ -7,10 +7,11 @@ import java.util.HashMap;
 // this class represents a single Node in the graph
 public class NodeData implements api.NodeData {
 
-    private int id;
+    private int id; // Todo check if it will work as final?
     private GeoLoc pos;
 
     private HashMap<Integer, api.EdgeData> edgesConnected;
+    // pointers, are the id's of the nodes having a edge leading to this node
     private ArrayList<Integer> pointing_to_me = new ArrayList<>(); //todo check it doesnt make problems
 
     private String info;
@@ -85,11 +86,6 @@ public class NodeData implements api.NodeData {
 
     public Collection<api.EdgeData> getEdgeCollection(){
         return this.edgesConnected.values();
-    }
-
-    //Is it needed?
-    public void setKey(int key){
-        this.id = key;
     }
 
     /**

@@ -48,79 +48,148 @@ public class DWG implements api.DirectedWeightedGraph {
 
     @Override
     public void connect(int src, int dest, double w) {
-        // check if both nodes are inside the graph.
-
-        // if at least one is not inside the graph then do nothing
-        if ( !(this.nodes.containsKey(src) && this.nodes.containsKey(dest))){
-            return;
-        }
-        // else connect them together
-        else {
+        // check if both nodes are inside the graph, if at least one is not inside the graph then do nothing
+        if (this.nodes.containsKey(src) && this.nodes.containsKey(dest)){
             EdgeData edgeData = new EdgeData(src,dest,w,this.nextKeyEdge++);
-            edgeData.setInfo("xd");
-            edgeData.setTag(-1);
             this.edges.put(edgeData.getId(),edgeData);
-            // add the edge to the source hashmap
-            NodeData source = (NodeData)this.nodes.get(src);
+            NodeData source = (NodeData)getNode(src);
             source.addEdge(edgeData);
-
+            NodeData destination = (NodeData)getNode(src);
+            destination.addPointer(src);
+            this.mc++;
         }
     }
 
     @Override
-    public Iterator<api.NodeData> nodeIter()
-    {
-        return this.nodes.values().iterator();
+    public Iterator<api.NodeData> nodeIter() {
+
+        return new Iterator<>() {
+
+            NodeData currNode;
+            private int currMc = mc;
+            private final Iterator<api.NodeData> normal_it = nodes.values().iterator();
+
+            @Override
+            public boolean hasNext() {
+                if(currMc !=mc)
+                    throw new RuntimeException("There was a Change in the graph");
+                return normal_it.hasNext();
+            }
+
+            @Override
+            public api.NodeData next() {
+                if(currMc !=mc)
+                    throw new RuntimeException("There was a Change in the graph");
+                currNode = (NodeData) normal_it.next();
+                return currNode;
+            }
+            @Override
+            public void remove() {
+                if(currMc !=mc)
+                    throw new RuntimeException("There was a Change in the graph");
+                removeNode(currNode.getKey());
+                currMc = mc;
+            }
+        };
     }
 
     @Override
-    public Iterator<api.EdgeData> edgeIter()
-    {
-        return this.edges.values().iterator();
+    public Iterator<api.EdgeData> edgeIter() {
+
+        return new Iterator<>() {
+
+            EdgeData currEdge;
+            private int currMc = mc;
+            private final Iterator<api.EdgeData> normal_it = edges.values().iterator();
+
+            @Override
+            public boolean hasNext() {
+                if(currMc !=mc)
+                    throw new RuntimeException("There was a Change in the graph");
+                return normal_it.hasNext();
+            }
+
+            @Override
+            public api.EdgeData next() {
+                if(currMc !=mc)
+                    throw new RuntimeException("There was a Change in the graph");
+                currEdge = (EdgeData) normal_it.next();
+                return currEdge;
+            }
+            @Override
+            public void remove() {
+                if(currMc !=mc)
+                    throw new RuntimeException("There was a Change in the graph");
+                removeEdge(currEdge.getSrc(),currEdge.getDest());
+                currMc = mc;
+            }
+        };
     }
 
     @Override
     public Iterator<api.EdgeData> edgeIter(int node_id) {
-       NodeData l = (NodeData) nodes.get(node_id);
-       return l.getEdgeCollection().iterator();
+
+        return new Iterator<>() {
+
+            EdgeData currEdge;
+            private int currMc = mc;
+            private final Iterator<api.EdgeData> normal_it = ((NodeData) nodes.get(node_id)).getEdgeCollection().iterator();
+
+            @Override
+            public boolean hasNext() {
+                if(currMc !=mc)
+                    throw new RuntimeException("There was a Change in the graph");
+                return normal_it.hasNext();
+            }
+
+            @Override
+            public api.EdgeData next() {
+                if(currMc !=mc)
+                    throw new RuntimeException("There was a Change in the graph");
+                currEdge = (EdgeData) normal_it.next();
+                return currEdge;
+            }
+            @Override
+            public void remove() {
+                if(currMc !=mc)
+                    throw new RuntimeException("There was a Change in the graph");
+                removeEdge(currEdge.getSrc(),currEdge.getDest());
+                currMc = mc;
+            }
+        };
     }
 
     @Override
     public api.NodeData removeNode(int key) {
+        //remove the node from all nodes
         NodeData removed = (NodeData) nodes.get(key);
-        Iterator it = edgeIter(key);
+        Iterator<api.EdgeData> it = edgeIter(key);
         nodes.remove(key);
         // remove the edges going out from this node
         while(it.hasNext()){
             it.next();
-            int dest = ((EdgeData)it).getDest();
-            edges.remove(getEdgeId(key,dest));
-            NodeData curr = (NodeData)getNode(dest);
-            curr.removePoiner(key);
+            it.remove();
         }
         // remove the edges going to this node
-        for (int i = 0; i < removed.getPointers().size(); i++) {
-            int node_id = removed.getPointers().get(i);
-            NodeData curr = (NodeData)getNode(node_id);
-            curr.removeEdge(key);
-            edges.remove(getEdgeId(node_id,key));
-        }
+        for (int i = removed.getPointers().size()-1; i >=0 ; i--)
+            removeEdge(removed.getPointers().get(i),key);
+        //return the node
         this.mc++;
         return removed;
-        // TOO long
-//        for (int i = 0; i < edges.size(); i++) {
-//            if(edges.get(i).getDest() == key || edges.get(i).getSrc() == key){
-//                edges.remove(i);
-//            }
-//        }
-
     }
 
     @Override
     public api.EdgeData removeEdge(int src, int dest) { // O(1)
-        int id = getEdgeId(src,dest);
-        EdgeData edgeData = (EdgeData) edges.remove(id);
-        //TODO not removed from node
+        //Remove from all edges
+        EdgeData edgeData = (EdgeData) edges.remove(getEdgeId(src,dest));
+        //Remove from the node its in (src)
+        NodeData  srcNode= (NodeData)nodes.get(src);
+        srcNode.removeEdge(dest);
+        //Remove the pointer (dest)
+        NodeData  destNode= (NodeData)nodes.get(dest);
+        destNode.removePoiner(src);
+        //return the removed edge
+        this.mc++;
         return edgeData;
     }
 
