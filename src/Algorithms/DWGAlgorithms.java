@@ -1,29 +1,51 @@
 package Algorithms;
 
+import Classes.DWG;
 import api.DirectedWeightedGraph;
 import api.DirectedWeightedGraphAlgorithms;
 import api.NodeData;
 
+import java.util.Iterator;
 import java.util.List;
-
+import java.util.LinkedList;
+import java.util.HashMap;
 public class DWGAlgorithms implements api.DirectedWeightedGraphAlgorithms {
+    DWG g;
     @Override
     public void init(DirectedWeightedGraph g) {
-
+        g = this.g;
     }
 
     @Override
     public DirectedWeightedGraph getGraph() {
-        return null;
+        return this.g;
     }
 
     @Override
     public DirectedWeightedGraph copy() {
-        return null;
+        DWG gCopy = g;
+        return gCopy;
     }
-
+    void DFSUtil(int v, boolean visited[])
+    {
+//        visited[v] = true;
+//        Iterator gItr = g.nodeIter();
+//        while(gItr.hasNext()){
+//            NodeData n = (NodeData) gItr.next();
+//            if (!visited[n.getKey()]) {
+//                DFSUtil(n.getKey(), visited);
+//            }
+//        }
+    }
     @Override
     public boolean isConnected() {
+//        boolean [] visited = new boolean[g.nodeSize()];
+//        for (int i = 0; i < g.nodeSize(); i++) {
+//            visited[i] = false;
+//        }
+//        for (int i = 0; i < g.nodeSize(); i++) {
+//            DFSUtil(i, visited);
+//        }
         return false;
     }
 

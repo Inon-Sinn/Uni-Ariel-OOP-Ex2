@@ -15,8 +15,7 @@ import com.google.gson.*;
  */
 public class Ex2 {
     public static void main(String[] args) throws IOException {
-        //System.out.println(getGraph("C:\\Users\\yaron\\IdeaProjects\\Uni-Ariel-OOP-Ex2\\data\\G1.json"));
-        System.out.println("fuck u");
+        System.out.println(getGraph("G1.json"));
     }
     /**
      * This static function will be used to test your implementation

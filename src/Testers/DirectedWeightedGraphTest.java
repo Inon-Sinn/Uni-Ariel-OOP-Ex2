@@ -1,13 +1,16 @@
-package Testers;
-
+import Classes.*;
 import org.junit.jupiter.api.Test;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 class DirectedWeightedGraphTest {
 
     @Test
     void getNode() {
+    DWG dwg = new DWG();
+    GeoLoc geoLoc = new GeoLoc(1,1,1);
+    NodeData node = new NodeData(1, geoLoc);
+    dwg.addNode(node);
+    System.out.println(dwg.getNode(1).getInfo());
+
     }
 
     @Test

@@ -1,12 +1,13 @@
 package Classes;
 
-import api.GeoLocation;
-
 // this is basic implementation of GeoLocation
-public class GL implements api.GeoLocation {
-    double x,y,z;
+public class GeoLoc implements api.GeoLocation {
 
-    public GL(double x, double y, double z){
+    double x;
+    double y;
+    double z;
+
+    public GeoLoc(double x, double y, double z){
         this.x = x;
         this.y = y;
         this.z = z;
@@ -40,10 +41,9 @@ public class GL implements api.GeoLocation {
     }
 
     @Override
-    public double distance(GeoLocation g) {
-        double x=g.x(),y=g.y(),z=g.z(),
-                pitagoras = Math.sqrt(Math.pow(this.x-x,2) + Math.pow(this.y-y,2) + Math.pow(this.z-z,2));
-        return pitagoras;
+    public double distance(api.GeoLocation g) {
+        double x=g.x(),y=g.y(),z=g.z();
+        return Math.sqrt(Math.pow(this.x-x,2) + Math.pow(this.y-y,2) + Math.pow(this.z-z,2));
     }
 
 }
