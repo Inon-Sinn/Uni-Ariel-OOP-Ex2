@@ -48,6 +48,8 @@ public class DWG implements api.DirectedWeightedGraph {
 
     @Override
     public void connect(int src, int dest, double w) {
+        if(src==dest)
+            throw new RuntimeException("cant create a edge from a node to itself");
         // check if both nodes are inside the graph, if at least one is not inside the graph then do nothing
         if (this.nodes.containsKey(src) && this.nodes.containsKey(dest)){
             EdgeData edgeData = new EdgeData(src,dest,w,this.nextKeyEdge++);
@@ -185,7 +187,7 @@ public class DWG implements api.DirectedWeightedGraph {
         srcNode.removeEdge(dest);
         //Remove the pointer (dest)
         NodeData  destNode= (NodeData)nodes.get(dest);
-        destNode.removePoiner(src);
+        destNode.removePointer(src);
         //return the removed edge
         this.mc++;
         return edgeData;

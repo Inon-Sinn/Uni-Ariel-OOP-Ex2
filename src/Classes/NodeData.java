@@ -6,17 +6,21 @@ import java.util.HashMap;
 
 /**
  * This class represents a single Node in the graph, the parameters that describe the node are:
- * id - int - the Id of the node, the key used in the hashmap of all nodes
- * pos - 
+ * id - int - the id of the node, the key used in the hashmap of all nodes
+ * pos - GeoLoc - the placement of the node
+ * edgesConnected - HashMap<Integer, api.EdgeData> - a hash map holding all edges going out from this node
+ * pointing_to_me - ArrayList<Integer> - all ids of the nodes having an edge pointing to this node
+ * info - String - The Meta-data describing the edge
+ * weight - double - weight of the node
+ * tag - int - Temporal data (aka color: e,g, white, gray, black)  represented as a number
  */
 public class NodeData implements api.NodeData {
 
     private final int id;
-    private final GeoLoc pos;
+    private GeoLoc pos;
 
     private HashMap<Integer, api.EdgeData> edgesConnected;
-    // pointers, are the id's of the nodes having a edge leading to this node
-    private ArrayList<Integer> pointing_to_me = new ArrayList<>(); //todo check it doesnt make problems
+    private ArrayList<Integer> pointing_to_me = new ArrayList<>(); //todo check it doesn't make problems
 
     private String info;
     private double weight = 0; //default 0
@@ -42,9 +46,7 @@ public class NodeData implements api.NodeData {
 
     @Override
     public void setLocation(api.GeoLocation p) {
-        this.pos.setX(p.x());
-        this.pos.setY(p.y());
-        this.pos.setZ(p.z());
+        this.pos = (GeoLoc)p;
     }
 
     @Override
@@ -84,7 +86,10 @@ public class NodeData implements api.NodeData {
         return this.edgesConnected.get(dest);
     }
 
-    //Possible to return the edge
+    /**
+     * removes the edge with the with destination "dest"
+     * @param dest - int - id of the destination of the edge we want to remove
+     */
     public void removeEdge(int dest){
         edgesConnected.remove(dest);
     }
@@ -94,16 +99,19 @@ public class NodeData implements api.NodeData {
     }
 
     /**
-     * Adds an edge to the hashmaps of all edges
+     * Adds an edge to the hashmaps of all edges of this node
      * @param edgeData api.EdgeData - the edge to add
      */
-    public void addEdge(api.EdgeData edgeData){
+    public void addEdge(api.EdgeData edgeData) throws RuntimeException{
         EdgeData e = (EdgeData) edgeData;
+        // throws a Run Time exception if the given edges source isn't the current node
+        if(e.getSrc()!=this.id)
+            throw new RuntimeException("trying to add a edge to the wrong node");
         this.edgesConnected.put(e.getDest(),e);
     }
 
     /**
-     * Return an Array with all nodes for which have a edge with this node as the destination
+     * Returns an Array with the id of all nodes which have an edge going to this node
      * @return ArrayList<Integer>
      */
     public ArrayList<Integer> getPointers(){
@@ -115,11 +123,12 @@ public class NodeData implements api.NodeData {
      * @param src int - the id  of the node which get an edge to this node
      */
     public void addPointer(int src){
-        this.pointing_to_me.add(src);
+        if(!pointing_to_me.contains(src))
+            this.pointing_to_me.add(src);
     }
 
-    public void removePoiner(int src){
-        this.pointing_to_me.remove((Integer)src);//TODO check it removes the object and not the placement
+    public void removePointer(int src) {
+        this.pointing_to_me.remove((Integer) src);//TODO check it removes the object and not the placement
     }
 
 }
