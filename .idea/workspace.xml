@@ -2,9 +2,12 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="3a259579-ac12-4a2f-b6c6-c235908855e5" name="Changes" comment="Changes">
+      <change afterPath="$PROJECT_DIR$/Uni-Ariel-OOP-Ex21.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/gson_2_8_6__1_.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/gson_2_8_6__1_.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/runConfigurations.xml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Classes/DWG.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Classes/DWG.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Classes/NodeData.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Classes/NodeData.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Algorithms/DWGAlgorithms.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Algorithms/DWGAlgorithms.java" afterDir="false" />
     </list>
     <list id="7666ff82-c017-404a-90ca-9a322961c04c" name="Changes by Inons" comment="" />
     <list id="9fff6c53-80dd-4318-9a46-a3b9f79a2f81" name="Changes by yaron" comment="" />
@@ -52,8 +55,8 @@
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="jdk.selected.JAVA_MODULE" value="openjdk-16" />
     <property name="last_directory_selection" value="$PROJECT_DIR$/src/Testers" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
-    <property name="project.structure.last.edited" value="SDKs" />
+    <property name="last_opened_file_path" value="$USER_HOME$/Downloads/gson-2.8.6 (1).jar" />
+    <property name="project.structure.last.edited" value="Libraries" />
     <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.2" />
     <property name="settings.editor.selected.configurable" value="CodeWithMe" />

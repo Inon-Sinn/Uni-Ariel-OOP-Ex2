@@ -2,15 +2,14 @@ package Algorithms;
 
 import Classes.DWG;
 import api.DirectedWeightedGraph;
-import api.DirectedWeightedGraphAlgorithms;
 import api.NodeData;
 
-import java.util.Iterator;
-import java.util.List;
-import java.util.LinkedList;
-import java.util.HashMap;
+import java.util.*;
+
 public class DWGAlgorithms implements api.DirectedWeightedGraphAlgorithms {
     DWG g;
+    boolean[] visited = new boolean[g.nodeSize()];
+    private LinkedList<Integer> adj[];
     @Override
     public void init(DirectedWeightedGraph g) {
         g = this.g;
@@ -18,7 +17,7 @@ public class DWGAlgorithms implements api.DirectedWeightedGraphAlgorithms {
 
     @Override
     public DirectedWeightedGraph getGraph() {
-        return this.g;
+        return g;
     }
 
     @Override
@@ -26,29 +25,33 @@ public class DWGAlgorithms implements api.DirectedWeightedGraphAlgorithms {
         DWG gCopy = g;
         return gCopy;
     }
-    void DFSUtil(int v, boolean visited[])
-    {
-//        visited[v] = true;
-//        Iterator gItr = g.nodeIter();
-//        while(gItr.hasNext()){
-//            NodeData n = (NodeData) gItr.next();
-//            if (!visited[n.getKey()]) {
-//                DFSUtil(n.getKey(), visited);
-//            }
-//        }
-    }
-    @Override
-    public boolean isConnected() {
-//        boolean [] visited = new boolean[g.nodeSize()];
-//        for (int i = 0; i < g.nodeSize(); i++) {
-//            visited[i] = false;
-//        }
-//        for (int i = 0; i < g.nodeSize(); i++) {
-//            DFSUtil(i, visited);
-//        }
-        return false;
+
+    LinkedList<Integer>[] getAdj(){
+        adj = new LinkedList[g.nodeSize()];
+        for (int i=0; i< adj.length; i++) adj[i] = new LinkedList();
+        return adj;
     }
 
+    void DFS(int v, boolean visited[]) {
+        visited[v] = true;
+        Iterator<Integer> i = getAdj()[v].listIterator();
+        while (i.hasNext()) {
+            int n = i.next();
+            if (!visited[n]) DFS(n, visited);
+        }
+    }
+
+    @Override
+    public boolean isConnected() {
+        boolean visited[] = new boolean[g.nodeSize()];
+        DFS(0, visited);
+        int count = 0;
+        for (int i = 0; i < visited.length; i++) {
+            if(visited[i]) count++;
+        }
+        if(count == g.nodeSize()) return true;
+        return false;
+    }
     @Override
     public double shortestPathDist(int src, int dest) {
         return 0;
