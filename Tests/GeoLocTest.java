@@ -33,4 +33,13 @@ class GeoLocTest {
     void distance() {
         assertEquals(g2.distance(g3),10.246950765959598);
     }
+
+    @Override
+    public String toString() {
+        return "<" +
+                g1 +
+                "," + g2 +
+                "," + g3 +
+                '>';
+    }
 }

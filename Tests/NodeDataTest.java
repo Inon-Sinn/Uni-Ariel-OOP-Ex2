@@ -65,6 +65,8 @@ class NodeDataTest {
     }
     @Test
     void edge(){
+        assertEquals(n1.getEdge(10),null);
+
         EdgeData e1 = new EdgeData(0,0,0,0);
         EdgeData e2 = new EdgeData(0,9,15,1);
         EdgeData e3 = new EdgeData(0,9,1.51,2);

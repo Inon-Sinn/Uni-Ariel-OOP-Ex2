@@ -53,4 +53,9 @@ public class GeoLoc implements api.GeoLocation {
         return Math.sqrt(Math.pow(this.x-x,2) + Math.pow(this.y-y,2) + Math.pow(this.z-z,2));
     }
 
+    @Override
+    public String toString() {
+        return x +","+ y +
+                "," + z ;
+    }
 }

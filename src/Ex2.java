@@ -1,22 +1,23 @@
+import Classes.DWG;
+import Classes.NodeData;
+import Classes.dwgFromJson;
 import api.DirectedWeightedGraph;
 import api.DirectedWeightedGraphAlgorithms;
+import com.google.gson.*;
+import com.google.gson.stream.JsonReader;
+import org.w3c.dom.Node;
 
-//import Classes.*;
-
+import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
-import java.io.Reader;
-import java.nio.file.Files;
-import java.nio.file.Path;
-
-//import com.google.gson.*;
 
 /**
  * This class is the main class for Ex2 - your implementation will be tested using this class.
  */
 public class Ex2 {
     public static void main(String[] args) throws IOException {
-        //System.out.println(getGraph("G1.json"));
-        System.out.println("hi");
+       DWG dwg = (DWG) getGraph("C:\\Users\\Inons\\IdeaProjects\\Ex2 - test\\data\\G1.json");
+
     }
     /**
      * This static function will be used to test your implementation
@@ -24,12 +25,22 @@ public class Ex2 {
      * @return
      */
     public static DirectedWeightedGraph getGraph(String json_file) throws IOException {
-//        Gson gson = new Gson();
-//        Reader reader = Files.newBufferedReader(Path.of(json_file));
-//        DWG g = gson.fromJson(reader, DWG.class);
-//        reader.close();
-//        return (DirectedWeightedGraph) g;
-        return null;
+        Gson gson = new Gson();
+        FileReader r = new FileReader(json_file);
+        JsonReader reader = new JsonReader(r);
+        dwgFromJson dwg = gson.fromJson(reader, dwgFromJson.class);
+
+        for (NodeData node: dwg.getNodes())
+            node.filler();
+
+        DWG jsonDWG = new DWG();
+        for (int i = 0; i < dwg.getNodes().size(); i++) {
+            jsonDWG.addNode(dwg.getNodes().get(i));
+        }
+        for (int i = 0; i < dwg.getEdges().size(); i++) {
+            jsonDWG.connect(dwg.getEdges().get(i));
+        }
+        return jsonDWG;
     }
     /**
      * This static function will be used to test your implementation
@@ -37,12 +48,11 @@ public class Ex2 {
      * @return
      */
     public static DirectedWeightedGraphAlgorithms getGrapgAlgo(String json_file) {
-//        DirectedWeightedGraphAlgorithms ans = null;
-//        // ****** Add your code here ******
-//        //
-//        // ********************************
-//        return ans;
-        return null;
+        DirectedWeightedGraphAlgorithms ans = null;
+        // ****** Add your code here ******
+        //
+        // ********************************
+        return ans;
     }
     /**
      * This static function will run your GUI using the json fime.
@@ -50,7 +60,7 @@ public class Ex2 {
      *
      */
     public static void runGUI(String json_file) {
-//        DirectedWeightedGraphAlgorithms alg = getGrapgAlgo(json_file);
+        DirectedWeightedGraphAlgorithms alg = getGrapgAlgo(json_file);
         // ****** Add your code here ******
         //
         // ********************************

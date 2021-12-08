@@ -1,5 +1,8 @@
 package Classes;
 
+import com.google.gson.annotations.SerializedName;
+import org.w3c.dom.Node;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -14,10 +17,12 @@ import java.util.HashMap;
  * weight - double - weight of the node
  * tag - int - Temporal data (aka color: e,g, white, gray, black)  represented as a number
  */
-public class NodeData implements api.NodeData {
-
-    private final int id;
-    private GeoLoc pos;
+public class NodeData implements api.NodeData{
+    @SerializedName("id")
+    private int id;
+    @SerializedName("pos")
+    private String pos = "";
+    private GeoLoc geoLoc;
 
     private HashMap<Integer, api.EdgeData> edgesConnected;
     private ArrayList<Integer> pointing_to_me = new ArrayList<>(); //todo check it doesn't make problems
@@ -25,11 +30,19 @@ public class NodeData implements api.NodeData {
     private String info;
     private double weight = 0; //default 0
     private int tag = 0; //default 0
+    //
 
-
-    public NodeData(int id, GeoLoc pos){
+    public NodeData(int id, GeoLoc geoLoc){
         this.id = id;
-        this.pos = pos;
+        this.geoLoc = geoLoc;
+        this.edgesConnected = new HashMap<>();
+        this.info = "unmarked node";
+    }
+
+
+    public void filler(){
+        String[] s = pos.split(",");
+        this.geoLoc = new GeoLoc(Double.parseDouble(s[0]),Double.parseDouble(s[1]),Double.parseDouble(s[2]));
         this.edgesConnected = new HashMap<>();
         this.info = "unmarked node";
     }
@@ -41,12 +54,12 @@ public class NodeData implements api.NodeData {
 
     @Override
     public api.GeoLocation getLocation() {
-        return this.pos;
+        return this.geoLoc;
     }
 
     @Override
     public void setLocation(api.GeoLocation p) {
-        this.pos = (GeoLoc)p;
+        this.geoLoc = (GeoLoc)p;
     }
 
     @Override
@@ -80,7 +93,7 @@ public class NodeData implements api.NodeData {
     }
 
     /**
-     * Return the edge given its destination
+     * Return the edge given its destination, return null if the edge doesn't exist
      */
     public api.EdgeData getEdge(int dest){
         return this.edgesConnected.get(dest);
@@ -131,4 +144,16 @@ public class NodeData implements api.NodeData {
         this.pointing_to_me.remove((Integer) src);//TODO check it removes the object and not the placement
     }
 
+    @Override
+    public String toString() {
+        return "NodeData{" +
+                "id=" + id +
+                ", geoLoc=" + geoLoc +
+                ", edges=" + edgesConnected +
+                ", pointers=" + pointing_to_me +
+                ", info='" + info + '\'' +
+                ", weight=" + weight +
+                ", tag=" + tag +
+                '}';
+    }
 }

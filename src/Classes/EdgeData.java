@@ -1,5 +1,7 @@
 package Classes;
 
+import com.google.gson.annotations.SerializedName;
+
 /**
  * This class represents a single edge between two nodes in the graph
  * src - int - source node id
@@ -11,9 +13,11 @@ package Classes;
  */
 public class EdgeData implements api.EdgeData {
 
-
+    @SerializedName("src")
     private final int src;
+    @SerializedName("dest")
     private final int dest;
+    @SerializedName("w")
     private double w;
     private String info;
     private int tag = 0; //default 0
@@ -79,4 +83,15 @@ public class EdgeData implements api.EdgeData {
         this.w = w;
     }
 
+    @Override
+    public String toString() {
+        return "EdgeData{" +
+                "src=" + src +
+                ", dest=" + dest +
+                ", w=" + w +
+                ", info='" + info + '\'' +
+                ", tag=" + tag +
+                ", id=" + id +
+                '}';
+    }
 }

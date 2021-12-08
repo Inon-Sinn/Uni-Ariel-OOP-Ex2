@@ -1,5 +1,8 @@
 package Classes;
 
+import com.google.gson.annotations.SerializedName;
+
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 
@@ -9,9 +12,10 @@ import java.util.Iterator;
 public class DWG implements api.DirectedWeightedGraph {
 
     int mc=0;
-    int nextKeyNode;
     int nextKeyEdge;
+    @SerializedName("Nodes")
     HashMap<Integer, api.NodeData> nodes;
+    @SerializedName("Edges")
     HashMap<Integer, api.EdgeData> edges;
 
     /**
@@ -19,47 +23,81 @@ public class DWG implements api.DirectedWeightedGraph {
      */
     public DWG(){
         this.nextKeyEdge=0;
-        this.nextKeyNode=0;
         this.nodes = new HashMap<>();
         this.edges = new HashMap<>();
     }
 
     /**
-     * Returns the node by the key
+     * Returns the node by the key,
+     * won't return the exact node given to the graph in addNode but a Node with the same values
      * @param key - the node_id
-     * @return NodeDate - if the key exists, null - else
+     * @return NodeDate - if the key exists, null else
      */
     @Override
     public api.NodeData getNode(int key) {
         return nodes.getOrDefault(key, null);
     }
 
+    /**
+     * Return the edge given the source and destination, null if the edge doesn't exist
+     * @param src int - the source of the edge
+     * @param dest int - the destination of the edge
+     * @return EdgeData - if the edge exists, null else
+     */
     @Override
-    public api.EdgeData getEdge(int src, int dest) {
-        return this.edges.get(getEdgeId(src, dest));
-        //return ((NodeData)nodes.get(src)).getEdge(dest); saves a little more time but is messier
-    }
-    @Override
-    public void addNode(api.NodeData n) {
-        Integer k = this.nextKeyNode++; // TODO check potential bug cuz no cast from interface used
-        this.nodes.put(k,n);
-        this.mc++;
+    public api.EdgeData getEdge(int src, int dest) {//O(1)
+        //check if the node exists
+        NodeData source = (NodeData) getNode(src);
+        if (source==null)//O(1)
+            return null;
+        //Check if the edge exists
+        if (source.getEdge(dest) == null)//O(1)
+            return null;
+        return this.edges.get(getEdgeId(src, dest));//O(1)
     }
 
+    /**
+     * Adds a Node to the graph,
+     * the function won't enter the exact node given but a copy of it, then so that in case we get a different kind of node
+     * that implements the interface NodeData we won't have any problems
+     * In the case the node already exists we won't add it
+     * @param n api.NodeData - the node we add to the graph
+     */
     @Override
-    public void connect(int src, int dest, double w) {
+    public void addNode(api.NodeData n) {
+        if(!nodes.containsKey(n.getKey())) {
+            NodeData newNode = new NodeData(n.getKey(), ((GeoLoc) n.getLocation()));
+            this.nodes.put(newNode.getKey(), newNode);
+            this.mc++;
+        }
+    }
+
+    public void connect(EdgeData edgeData){
+        connect(edgeData.getSrc(),edgeData.getDest(),edgeData.getWeight());
+    }
+
+    /**
+     *
+     * @param src - the source of the edge.
+     * @param dest - the destination of the edge.
+     * @param w - positive weight representing the cost (aka time, price, etc.) between src-->dest.
+     */
+    @Override
+    public void connect(int src, int dest, double w) {//TODO check what are invalid src,dest and w
         if(src==dest)
             throw new RuntimeException("cant create a edge from a node to itself");
         // check if both nodes are inside the graph, if at least one is not inside the graph then do nothing
-        if (this.nodes.containsKey(src) && this.nodes.containsKey(dest)){
+        if (this.nodes.containsKey(src) && this.nodes.containsKey(dest) && w>=0){
             EdgeData edgeData = new EdgeData(src,dest,w,this.nextKeyEdge++);
             this.edges.put(edgeData.getId(),edgeData);
             NodeData source = (NodeData)getNode(src);
             source.addEdge(edgeData);
-            NodeData destination = (NodeData)getNode(src);
+            NodeData destination = (NodeData)getNode(dest);
             destination.addPointer(src);
             this.mc++;
         }
+        else
+            throw new RuntimeException("Invalid parameters");
     }
 
     @Override
@@ -69,7 +107,8 @@ public class DWG implements api.DirectedWeightedGraph {
 
             NodeData currNode;
             private int currMc = mc;
-            private final Iterator<api.NodeData> normal_it = nodes.values().iterator();
+            private final ArrayList<api.NodeData> valuesList= new ArrayList<>(nodes.values());
+            private final Iterator<api.NodeData> normal_it = valuesList.iterator();
 
             @Override
             public boolean hasNext() {
@@ -89,6 +128,7 @@ public class DWG implements api.DirectedWeightedGraph {
                 if(currMc !=mc)
                     throw new RuntimeException("There was a Change in the graph");
                 removeNode(currNode.getKey());
+                normal_it.remove();
                 currMc = mc;
             }
         };
@@ -101,7 +141,8 @@ public class DWG implements api.DirectedWeightedGraph {
 
             EdgeData currEdge;
             private int currMc = mc;
-            private final Iterator<api.EdgeData> normal_it = edges.values().iterator();
+            private final ArrayList<api.EdgeData> valuesList= new ArrayList<>(edges.values());
+            private final Iterator<api.EdgeData> normal_it = valuesList.iterator();
 
             @Override
             public boolean hasNext() {
@@ -121,6 +162,7 @@ public class DWG implements api.DirectedWeightedGraph {
                 if(currMc !=mc)
                     throw new RuntimeException("There was a Change in the graph");
                 removeEdge(currEdge.getSrc(),currEdge.getDest());
+                normal_it.remove();
                 currMc = mc;
             }
         };
@@ -133,7 +175,8 @@ public class DWG implements api.DirectedWeightedGraph {
 
             EdgeData currEdge;
             private int currMc = mc;
-            private final Iterator<api.EdgeData> normal_it = ((NodeData) nodes.get(node_id)).getEdgeCollection().iterator();
+            private final ArrayList<api.EdgeData> valuesList= new ArrayList<>(((NodeData) nodes.get(node_id)).getEdgeCollection());
+            private final Iterator<api.EdgeData> normal_it = valuesList.iterator();
 
             @Override
             public boolean hasNext() {
@@ -154,6 +197,7 @@ public class DWG implements api.DirectedWeightedGraph {
                 if(currMc !=mc)
                     throw new RuntimeException("There was a Change in the graph");
                 removeEdge(currEdge.getSrc(),currEdge.getDest());
+                normal_it.remove();
                 currMc = mc;
             }
         };
@@ -163,8 +207,9 @@ public class DWG implements api.DirectedWeightedGraph {
     public api.NodeData removeNode(int key) {
         //remove the node from all nodes
         NodeData removed = (NodeData) nodes.get(key);
+        if(removed==null)
+            return null;
         Iterator<api.EdgeData> it = edgeIter(key);
-        nodes.remove(key);
         // remove the edges going out from this node
         while(it.hasNext()){
             it.next();
@@ -174,6 +219,7 @@ public class DWG implements api.DirectedWeightedGraph {
         for (int i = removed.getPointers().size()-1; i >=0 ; i--)
             removeEdge(removed.getPointers().get(i),key);
         //return the node
+        nodes.remove(key);
         this.mc++;
         return removed;
     }
@@ -213,8 +259,12 @@ public class DWG implements api.DirectedWeightedGraph {
      * @return int - id of the edge in the edges hashmap
      */
     public int getEdgeId(int src, int dest){
-        NodeData  currentNode= (NodeData)nodes.get(src);
+        NodeData  currentNode= (NodeData)getNode(src);
+        if(currentNode == null)
+            throw new RuntimeException("The Node doesn't exist");
         EdgeData currentEdge= (EdgeData)currentNode.getEdge(dest);
+        if(currentEdge == null)
+            throw new RuntimeException("The edge doesn't exist");
         return currentEdge.getId();
 
         //return the same but without building new objects and because of that is faster and saves place but is messier
