@@ -77,7 +77,7 @@ public class DWG implements api.DirectedWeightedGraph {
     }
 
     /**
-     *
+     * Adds an edge to the graph given the source, destination and weight
      * @param src - the source of the edge.
      * @param dest - the destination of the edge.
      * @param w - positive weight representing the cost (aka time, price, etc.) between src-->dest.
@@ -100,6 +100,10 @@ public class DWG implements api.DirectedWeightedGraph {
             throw new RuntimeException("Invalid parameters");
     }
 
+    /**
+     * Returns a new iterator for all nodes
+     * @return Iterator<api.NodeData>
+     */
     @Override
     public Iterator<api.NodeData> nodeIter() {
 
@@ -134,6 +138,10 @@ public class DWG implements api.DirectedWeightedGraph {
         };
     }
 
+    /**
+     * Returns a new iterator for all edges
+     * @return Iterator<api.EdgeData>
+     */
     @Override
     public Iterator<api.EdgeData> edgeIter() {
 
@@ -168,6 +176,10 @@ public class DWG implements api.DirectedWeightedGraph {
         };
     }
 
+    /**
+     * Returns a new iterator for all edges of a given node
+     * @return Iterator<api.EdgeData>
+     */
     @Override
     public Iterator<api.EdgeData> edgeIter(int node_id) {
 
@@ -203,6 +215,11 @@ public class DWG implements api.DirectedWeightedGraph {
         };
     }
 
+    /**
+     * Removes a node from the graph by the key
+     * @param key int - the id of the node
+     * @return api.NodeData - the removed node
+     */
     @Override
     public api.NodeData removeNode(int key) {
         //remove the node from all nodes
@@ -224,6 +241,12 @@ public class DWG implements api.DirectedWeightedGraph {
         return removed;
     }
 
+    /**
+     * Removes an edge from the graph
+     * @param src int - the id of the source of the edge
+     * @param dest int - the id if the destination of the edge
+     * @return api.EdgeData - the removed edge
+     */
     @Override
     public api.EdgeData removeEdge(int src, int dest) { // O(1)
         //Remove from all edges

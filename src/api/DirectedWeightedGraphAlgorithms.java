@@ -80,7 +80,6 @@ public interface DirectedWeightedGraphAlgorithms {
      * @return true - iff the file was successfully saved
      */
     public boolean save(String file);
-
     /**
      * This method loads a graph to this graph algorithm.
      * if the file was successfully loaded - the underlying graph

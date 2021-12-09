@@ -8,6 +8,8 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+
+
 public class MenuPanel extends JPanel implements ActionListener {
 
     private String selectedJsonFile;
@@ -57,7 +59,9 @@ public class MenuPanel extends JPanel implements ActionListener {
         switch(x) {
             case 0:
                 JComboBox cb = (JComboBox) e.getSource();
-                RunGui.setJson((String) cb.getSelectedItem());
+                String json_file = (String) cb.getSelectedItem();
+                RunGui.setJson(json_file);
+                RunGui.getDwg_algo().load("data\\" + json_file);
                 this.label.setText("You have Selected: " + RunGui.getJson());
                 break;
             case 1:

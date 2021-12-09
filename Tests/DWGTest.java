@@ -112,17 +112,65 @@ class DWGTest {
     void nodeIter() {
         graph1.addNode(n1);
         graph1.addNode(n2);
+        graph1.addNode(n3);
         Iterator<api.NodeData> it = graph1.nodeIter();
-        while (it.hasNext())
-            System.out.println(it.next().getKey());
+        it.next();
+//        graph1.addNode(n3);
+//        try{
+//            it.next();
+//        }
+//        catch(RuntimeException e){
+//            System.out.println("works");
+//        }
+        it.remove();
+        assertEquals(graph1.nodeSize(),2);
+        System.out.println(it.next().getKey());
     }
 
     @Test
     void edgeIter() {
+        graph1.addNode(n1);
+        graph1.addNode(n2);
+        graph1.addNode(n3);
+        graph1.connect(n1.getKey(), n2.getKey(),1);
+        graph1.connect(n2.getKey(), n3.getKey(),5);
+        graph1.connect(n1.getKey(), n3.getKey(),10);
+        Iterator<api.EdgeData> it = graph1.edgeIter();
+        it.next();
+        graph1.addNode(n3);
+        try{
+            graph1.addNode(new NodeData(4,g1));
+            it.next();
+        }
+        catch(RuntimeException e){
+            System.out.println("works");
+        }
+//        it.remove();
+//        assertEquals(graph1.edgeSize(),2);
+//        System.out.println(it.next().getWeight());
     }
 
     @Test
     void testEdgeIter() {
+        graph1.addNode(n1);
+        graph1.addNode(n2);
+        graph1.addNode(n3);
+        graph1.connect(n1.getKey(), n2.getKey(),1);
+        graph1.connect(n2.getKey(), n3.getKey(),5);
+        graph1.connect(n1.getKey(), n3.getKey(),10);
+        Iterator<api.EdgeData> it = graph1.edgeIter(n1.getKey());
+        it.next();
+        graph1.addNode(n3);
+//        try{
+//            graph1.addNode(new NodeData(4,g1));
+//            it.next();
+//        }
+//        catch(RuntimeException e){
+//            System.out.println("works");
+//        }
+        it.remove();
+        assertEquals(graph1.edgeSize(),2);
+        System.out.println(it.next().getWeight());
     }
 
     @Test

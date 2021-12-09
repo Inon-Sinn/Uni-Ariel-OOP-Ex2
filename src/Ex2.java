@@ -1,6 +1,8 @@
+import Algorithms.DWG_algo;
 import Classes.DWG;
 import Classes.NodeData;
 import Classes.dwgFromJson;
+import GUI.RunGui;
 import api.DirectedWeightedGraph;
 import api.DirectedWeightedGraphAlgorithms;
 import com.google.gson.*;
@@ -25,22 +27,7 @@ public class Ex2 {
      * @return
      */
     public static DirectedWeightedGraph getGraph(String json_file) throws IOException {
-        Gson gson = new Gson();
-        FileReader r = new FileReader(json_file);
-        JsonReader reader = new JsonReader(r);
-        dwgFromJson dwg = gson.fromJson(reader, dwgFromJson.class);
-
-        for (NodeData node: dwg.getNodes())
-            node.filler();
-
-        DWG jsonDWG = new DWG();
-        for (int i = 0; i < dwg.getNodes().size(); i++) {
-            jsonDWG.addNode(dwg.getNodes().get(i));
-        }
-        for (int i = 0; i < dwg.getEdges().size(); i++) {
-            jsonDWG.connect(dwg.getEdges().get(i));
-        }
-        return jsonDWG;
+        return getGrapgAlgo(json_file).getGraph();
     }
     /**
      * This static function will be used to test your implementation
@@ -48,9 +35,12 @@ public class Ex2 {
      * @return
      */
     public static DirectedWeightedGraphAlgorithms getGrapgAlgo(String json_file) {
-        DirectedWeightedGraphAlgorithms ans = null;
+
         // ****** Add your code here ******
-        //
+        DirectedWeightedGraphAlgorithms ans;
+        DWG_algo algorithms = new DWG_algo();
+        algorithms.load(json_file);
+        ans = (DirectedWeightedGraphAlgorithms) algorithms;
         // ********************************
         return ans;
     }
@@ -62,7 +52,8 @@ public class Ex2 {
     public static void runGUI(String json_file) {
         DirectedWeightedGraphAlgorithms alg = getGrapgAlgo(json_file);
         // ****** Add your code here ******
-        //
+        String[] ar = null;
+        RunGui.main(ar);
         // ********************************
     }
 }
