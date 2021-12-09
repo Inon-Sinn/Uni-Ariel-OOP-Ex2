@@ -4,6 +4,9 @@
 In this assignment we were given a json file and had using it, to implement a Directed weighted graph using the given Interfaces.<br/>
 In Addition we were given a list of algorithms that we had to implement and then showcase all of it using GUI
 
+### How to run
+Use the jar???
+
 ### Our Idea
 We implmented the directive weighted graph using 2 hashmaps,<br/>
 the first is a hashmaps of all the nodes in the graph,<br/>
@@ -38,13 +41,51 @@ We do this using a greedy algorithem, we start from the first city, the next cit
 
 ### Files 
 
-| Algoritms    | Describiton |
+| given Interfaces(api)| Descripition |
 | ---------- | --------- |
-| isConnected | Return true if the graph is connected |
-| 999999999  | 999999999  |
-| 99999999   | 99999999   |
-| 9999999    | 9999999    |
+| DirectedWeightedGraph | interface for a Directed Weighted Graph |
+| DirectedWeightedGraphAlgorithms  |  an Interface with the algorithms listed before |
+| EdgeData | an Interface for the edges in the graph   |
+| GeoLocation | an Interface for the coordinates of the node in the real world, <x,y,z>   |
+| NodeData | an Interface for the nodes in the graph    |
 
-### How to run
+
+| Classes| Descripition |
+| ---------- | --------- |
+| DWG | Implements the DirectedWeightedGraph interface |
+| NodeData | a Node in the graph(DWG) , Implements the NodeData interface  |
+| EdgeData | a Edge in the graph(DWG) , Implements the EdgeData interface   |
+| GeoLoc | the coordinates of the a nodes,  Implements the GeoLocation interface |
+| dwgFromJson| An auxiliary class to create graph(DWG) given a json file   |
+| dwgToJson|  An auxiliary class to create a new json file given a graph(DWG)  |
+| primitiveNodeData|  An auxiliary class used by dwgToJson  |
+| primitiveEdgeData|  An auxiliary class used by dwgToJson  |
+
+| Algorithms| Descripition |
+| ---------- | --------- |
+| DWG_algo | hold all the listed algorithems and the way to load and save a json file of a graph,</br> Implements the DirectedWeightedGraphAlgorithms interface |
+| Dijkstra  | Implements the Dijjstra Algorithm  |
+| DFS |  Implements the DFS Algorithm  |
+
+| GUI| Descripition |
+| ---------- | --------- |
+| GraphJFrame |  |
+| GraphPanel |   |
+| MenuJFrame |    |
+| MenuPanel |    |
+| Arrow2D |    |
+| Constants |    |
+| Run Gui |    |
+
+Test exists but we wont shown them here
+
+### UML
+
+
+### GUI
+
+
+
+
 
 
