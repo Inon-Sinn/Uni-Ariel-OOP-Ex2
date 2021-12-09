@@ -4,6 +4,8 @@ import Classes.GeoLoc;
 import Classes.NodeData;
 import GUI.Constants;
 import GUI.RunGui;
+import GUI.support.Arrow2D;
+
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
@@ -82,6 +84,10 @@ public class GraphPanel extends JPanel implements ActionListener {
                     g1.fill(node);
                     g1.draw(node);
                 }
+                //Iterator<Arrow2D> iterator1 = RunGui.getEdgesIteratorFromDWG();
+                Arrow2D arrow2D = new Arrow2D();
+                g1.draw(arrow2D);
+
             }
         };
         myCanvas.setBackground(Color.green);

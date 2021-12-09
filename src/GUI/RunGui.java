@@ -9,6 +9,8 @@ import GUI.MenuPack.MenuJFrame;
 
 import java.awt.*;
 import java.awt.geom.Ellipse2D;
+
+import GUI.support.Arrow2D;
 import api.GeoLocation;
 import org.w3c.dom.Node;
 import org.w3c.dom.ranges.Range;
@@ -135,10 +137,30 @@ public class RunGui {
         Minimumy = minimumY;
         Maximumy = maximumY;
     }
+    public static Iterator<Ellipse2D> getNodesIteratorFromDWG(){
+        Iterator<api.NodeData> iterator = dwg_algo.getGraph().nodeIter();
+        ArrayList<Ellipse2D> nodes = new ArrayList<Ellipse2D>();
+        while(iterator.hasNext()){
+            NodeData nodeData = (NodeData) iterator.next();
+            double xratio = ratioX(nodeData.getLocation().x()),
+                    yratio = ratioY(nodeData.getLocation().y());
+            double xpos = xratio * (Constants.CANVAS_WIDTH-Constants.NODE_WIDTH),
+                    ypos = yratio * (Constants.CANVAS_HEIGHT-Constants.NODE_WIDTH);
+            Ellipse2D node = new Ellipse2D.Double(xpos, ypos, Constants.NODE_WIDTH,Constants.NODE_HEIGHT);
+            nodes.add(node);
+        }
+        return nodes.iterator();
+    }
+
+    public static Iterator<Arrow2D> getEdgesIteratorFromDWG(){
+
+
+        return null;
+    }
+
     public static void setJson(String json){
         Json = json;
     }
-
     public static String getJson(){
         return Json;
     }
@@ -147,20 +169,6 @@ public class RunGui {
     }
     public static DWG_algo getDwg_algo(){
         return dwg_algo;
-    }
-    public static Iterator<Ellipse2D> getNodesIteratorFromDWG(){
-        Iterator<api.NodeData> iterator = dwg_algo.getGraph().nodeIter();
-        ArrayList<Ellipse2D> nodes = new ArrayList<Ellipse2D>();
-        while(iterator.hasNext()){
-            NodeData nodeData = (NodeData) iterator.next();
-            double xratio = ratioX(nodeData.getLocation().x()),
-            yratio = ratioY(nodeData.getLocation().y());
-            double xpos = xratio * (Constants.CANVAS_WIDTH-Constants.NODE_WIDTH),
-                    ypos = yratio * (Constants.CANVAS_HEIGHT-Constants.NODE_WIDTH);
-            Ellipse2D node = new Ellipse2D.Double(xpos, ypos, Constants.NODE_WIDTH,Constants.NODE_HEIGHT);
-            nodes.add(node);
-        }
-        return nodes.iterator();
     }
     public static Dimension getFrameSize(){
         return GraphJFrame.getSize();
