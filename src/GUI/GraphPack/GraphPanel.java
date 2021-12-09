@@ -12,6 +12,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.geom.Ellipse2D;
+import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -81,13 +82,19 @@ public class GraphPanel extends JPanel implements ActionListener {
                 Iterator<Ellipse2D> iterator =  RunGui.getNodesIteratorFromDWG();
                 while(iterator.hasNext()){
                     Ellipse2D node = iterator.next();
-                    g1.fill(node);
+                    //g1.fill(node);
                     g1.draw(node);
                 }
-                //Iterator<Arrow2D> iterator1 = RunGui.getEdgesIteratorFromDWG();
-                Arrow2D arrow2D = new Arrow2D();
-                g1.draw(arrow2D);
+//                Point2D.Double src = new Point2D.Double(100,100);
+//                Point2D.Double dest = new Point2D.Double(50,50);
+//                Arrow2D arrow2D = new Arrow2D(src,dest);
+//                g1.draw(arrow2D);
 
+                Iterator<Arrow2D> iterator1 = RunGui.getEdgesIteratorFromDWG();
+                while(iterator1.hasNext()){
+                    Arrow2D arrow = iterator1.next();
+                    g1.draw(arrow);
+                }
             }
         };
         myCanvas.setBackground(Color.green);

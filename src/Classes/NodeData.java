@@ -5,6 +5,7 @@ import org.w3c.dom.Node;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.HashMap;
 
 /**
@@ -17,7 +18,7 @@ import java.util.HashMap;
  * weight - double - weight of the node
  * tag - int - Temporal data (aka color: e,g, white, gray, black)  represented as a number
  */
-public class NodeData implements api.NodeData{
+public class NodeData implements api.NodeData, Comparator {
     @SerializedName("id")
     private int id;
     @SerializedName("pos")
@@ -25,10 +26,10 @@ public class NodeData implements api.NodeData{
     private GeoLoc geoLoc;
 
     private HashMap<Integer, api.EdgeData> edgesConnected;
-    private ArrayList<Integer> pointing_to_me = new ArrayList<>(); //todo check it doesn't make problems
+    private ArrayList<Integer> pointing_to_me = new ArrayList<>();
 
     private String info;
-    private double weight = 0; //default 0
+    private double weight = Double.POSITIVE_INFINITY; //default 0
     private int tag = 0; //default 0
     //
 
@@ -155,5 +156,16 @@ public class NodeData implements api.NodeData{
                 ", weight=" + weight +
                 ", tag=" + tag +
                 '}';
+    }
+
+    @Override
+    public int compare(Object o1, Object o2) {
+        NodeData n1 = (NodeData) o1;
+        NodeData n2 = (NodeData) o2;
+        if (n1.getWeight() < n2.getWeight())
+            return -1;
+        if (n2.getWeight() > n2.getWeight())
+            return 1;
+        return 0;
     }
 }

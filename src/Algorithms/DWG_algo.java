@@ -89,7 +89,7 @@ public class DWG_algo implements api.DirectedWeightedGraphAlgorithms{
     @Override
     public List<NodeData> shortestPath(int src, int dest) {
         Dijkstra current = new Dijkstra(graph,src);
-        return current.shortestPath(dest);
+        return current.shortestPath(src,dest);
     }
 
     @Override

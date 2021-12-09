@@ -2,6 +2,7 @@ package GUI;
 
 import Algorithms.DWG_algo;
 import Classes.DWG;
+import Classes.EdgeData;
 import Classes.GeoLoc;
 import Classes.NodeData;
 import GUI.GraphPack.GraphJFrame;
@@ -15,6 +16,8 @@ import api.GeoLocation;
 import org.w3c.dom.Node;
 import org.w3c.dom.ranges.Range;
 
+import java.awt.geom.Point2D;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Iterator;
 
@@ -141,21 +144,35 @@ public class RunGui {
         Iterator<api.NodeData> iterator = dwg_algo.getGraph().nodeIter();
         ArrayList<Ellipse2D> nodes = new ArrayList<Ellipse2D>();
         while(iterator.hasNext()){
-            NodeData nodeData = (NodeData) iterator.next();
-            double xratio = ratioX(nodeData.getLocation().x()),
-                    yratio = ratioY(nodeData.getLocation().y());
-            double xpos = xratio * (Constants.CANVAS_WIDTH-Constants.NODE_WIDTH),
-                    ypos = yratio * (Constants.CANVAS_HEIGHT-Constants.NODE_WIDTH);
-            Ellipse2D node = new Ellipse2D.Double(xpos, ypos, Constants.NODE_WIDTH,Constants.NODE_HEIGHT);
+            GeoLoc nodeLoc = (GeoLoc) iterator.next().getLocation();
+            Point2D.Double curPoint = convertFromRangeToCanvas(new Point2D.Double(nodeLoc.x(), nodeLoc.y()));
+            Ellipse2D node = new Ellipse2D.Double(curPoint.x, curPoint.y,
+                    Constants.NODE_WIDTH,Constants.NODE_HEIGHT);
             nodes.add(node);
         }
         return nodes.iterator();
     }
+    public static Point2D.Double convertFromRangeToCanvas(Point2D.Double point){
+        double xRatio = ratioX(point.x),
+                yRatio = ratioY(point.y);
+        double xPos = Constants.NODE_WIDTH + xRatio * (Constants.CANVAS_WIDTH - 2*Constants.NODE_WIDTH),
+                yPos = Constants.NODE_HEIGHT + yRatio * (Constants.CANVAS_HEIGHT - 2*Constants.NODE_HEIGHT);
+        return new Point2D.Double(xPos,yPos);
+    }
 
     public static Iterator<Arrow2D> getEdgesIteratorFromDWG(){
-
-
-        return null;
+        Iterator<api.EdgeData> iterator = dwg_algo.getGraph().edgeIter();
+        DWG dwg = (DWG) dwg_algo.getGraph();
+        ArrayList<Arrow2D> arrow2DS = new ArrayList<Arrow2D>();
+        while(iterator.hasNext()){
+            EdgeData edgeData = (EdgeData) iterator.next();
+            GeoLoc srcLoc = (GeoLoc) dwg.getNode(edgeData.getSrc()).getLocation();
+            GeoLoc destLoc = (GeoLoc) dwg.getNode(edgeData.getDest()).getLocation();
+            Point2D.Double srcPoint = convertFromRangeToCanvas(new Point2D.Double(srcLoc.x(),srcLoc.y()));
+            Point2D.Double destPoint = convertFromRangeToCanvas(new Point2D.Double(destLoc.x(),destLoc.y()));
+            arrow2DS.add(new Arrow2D(srcPoint,destPoint));
+        }
+        return arrow2DS.iterator();
     }
 
     public static void setJson(String json){
