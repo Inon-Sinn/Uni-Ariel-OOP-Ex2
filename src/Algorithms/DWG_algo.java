@@ -7,11 +7,11 @@ import api.DirectedWeightedGraph;
 import api.NodeData;
 import com.google.gson.Gson;
 import com.google.gson.stream.JsonReader;
-import org.w3c.dom.Node;
 
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -75,9 +75,7 @@ public class DWG_algo implements api.DirectedWeightedGraphAlgorithms{
         if (!cur.connected())
             return false;
         cur = new DFS((DWG)ReverseCopy());
-        if (!cur.connected())
-            return false;
-        return true;
+        return cur.connected();
     }
 
     @Override
@@ -113,13 +111,54 @@ public class DWG_algo implements api.DirectedWeightedGraphAlgorithms{
 
     @Override
     public List<NodeData> tsp(List<NodeData> cities) {
-        return null;
+        ArrayList<api.NodeData> completePath = new ArrayList<>();
+        int currentCity = cities.remove(0).getKey();
+        double min = Double.POSITIVE_INFINITY;
+        ArrayList<api.NodeData> currentPath = new ArrayList<>();
+        while(!cities.isEmpty()){
+            int nextCity = 0; //Todo will problem when there is no path
+            int remove = 0;
+            for (NodeData city : cities) {
+                ArrayList<NodeData> path = (ArrayList<NodeData>) shortestPath(currentCity, city.getKey());
+                double dis = graph.getNode(city.getKey()).getWeight();
+                if (dis < min) {
+                    nextCity = city.getKey();
+                    currentPath = path;
+                    min = dis;
+                }
+            }
+            currentCity = nextCity;
+            cities.remove(remove);
+            completePath.addAll(currentPath);
+        }
+        return completePath;
     }
 
     @Override
     public boolean save(String file)
     {
-        return false;
+        ArrayList<Classes.NodeData> nodes = new ArrayList<>();
+        ArrayList<EdgeData> edges = new ArrayList<>();
+        Iterator<api.NodeData> iterator1 = graph.nodeIter();
+        Iterator<api.EdgeData> iterator2 = graph.edgeIter();
+        while(iterator1.hasNext()) {
+            nodes.add((Classes.NodeData)iterator1.next());
+        }
+        while(iterator2.hasNext()){
+            edges.add((Classes.EdgeData)iterator2.next());
+        }
+        dwgFromJson tojson = new dwgFromJson(nodes,edges);
+        Gson gson = new Gson();
+        FileWriter fileWriter;
+        try {
+            fileWriter= new FileWriter(file);
+        }
+        catch(IOException e){
+            System.out.println("CANT SAVE TO FILE");
+            return false;
+        }
+        gson.toJson(tojson,fileWriter);
+        return true;
     }
 
     @Override
@@ -147,9 +186,6 @@ public class DWG_algo implements api.DirectedWeightedGraphAlgorithms{
             jsonDWG.connect(dwg.getEdges().get(i));
         }
         init(jsonDWG);
-        if(graph != null){
-            return true;
-        }
-        return false;
+        return graph != null;
     }
 }

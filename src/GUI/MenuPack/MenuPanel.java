@@ -7,7 +7,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
+import java.io.File;
 
 
 public class MenuPanel extends JPanel implements ActionListener {
@@ -31,8 +31,15 @@ public class MenuPanel extends JPanel implements ActionListener {
         //label.setVisible(true);
         this.add(label);
 
-        String[] jsons = {"G1.json", "G2.json", "G3.json"};
-        JComboBox selectedJsons = new JComboBox(jsons);
+        File Data = new File("data");
+        File[] jFiles = Data.listFiles();
+        String[] jSons_names = new String[jFiles.length];
+        int i=0;
+        for (File object : jFiles) {
+            if(object.isFile())
+            jSons_names[i++] = object.getName();
+        }
+        JComboBox selectedJsons = new JComboBox(jSons_names);
         selectedJsons.setSelectedIndex(2);
         selectedJsons.addActionListener(this);
         selectedJsons.setActionCommand("0");

@@ -16,6 +16,7 @@ import api.GeoLocation;
 import org.w3c.dom.Node;
 import org.w3c.dom.ranges.Range;
 
+import javax.swing.*;
 import java.awt.geom.Point2D;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
@@ -190,4 +191,8 @@ public class RunGui {
     public static Dimension getFrameSize(){
         return GraphJFrame.getSize();
     }
+    public static void ShowMessage(String message){
+        JOptionPane.showMessageDialog(GraphJFrame, message);
+    }
+
 }
