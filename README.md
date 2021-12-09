@@ -32,8 +32,8 @@ First we check if the graph is even connected else there won't be a center at al
 If the graph is connected we run Dijkstra from every node we return the node minimizes the max distance to all the other nodes.
 
 _tps_ - O(n^2*|E|log|V|)<br/>
-
-
+traveling salesman problem(almost), we get a list of cities(id's of nodes) and have to return a path that passes through all cities(not the shortest just a path).<br/>
+We do this using a greedy algorithem, we start from the first city, the next city is the closest unvisited city to it, which we find with Dijkstra, and we contuine like this until we went over all city's. After which we return the path we went.
 
 
 ### Files 
