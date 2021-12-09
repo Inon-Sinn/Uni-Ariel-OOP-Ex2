@@ -1,11 +1,10 @@
 package Algorithms;
 
-import Classes.DWG;
-import Classes.EdgeData;
-import Classes.dwgFromJson;
+import Classes.*;
 import api.DirectedWeightedGraph;
 import api.NodeData;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.stream.JsonReader;
 
 import java.io.FileNotFoundException;
@@ -20,6 +19,7 @@ import java.util.List;
 public class DWG_algo implements api.DirectedWeightedGraphAlgorithms{
 
     private DWG graph;
+
 
     @Override
     public void init(DirectedWeightedGraph g) {
@@ -137,30 +137,28 @@ public class DWG_algo implements api.DirectedWeightedGraphAlgorithms{
     @Override
     public boolean save(String file)
     {
-        ArrayList<Classes.NodeData> nodes = new ArrayList<>();
-        ArrayList<EdgeData> edges = new ArrayList<>();
+        dwgTojson tojson = new dwgTojson(new ArrayList<primitiveEdgeData>(),new ArrayList<primitiveNodeData>());
         Iterator<api.NodeData> iterator1 = graph.nodeIter();
         Iterator<api.EdgeData> iterator2 = graph.edgeIter();
         while(iterator1.hasNext()) {
-            nodes.add((Classes.NodeData)iterator1.next());
+            tojson.addNode((Classes.NodeData) iterator1.next());
         }
         while(iterator2.hasNext()){
-            edges.add((Classes.EdgeData)iterator2.next());
+           tojson.addEdge((Classes.EdgeData)iterator2.next());
         }
-        dwgFromJson tojson = new dwgFromJson(nodes,edges);
-        Gson gson = new Gson();
+        Gson gson = new GsonBuilder().setPrettyPrinting().create();
         FileWriter fileWriter;
         try {
             fileWriter= new FileWriter(file);
+            gson.toJson(tojson,fileWriter);
+            fileWriter.close();
         }
         catch(IOException e){
             System.out.println("CANT SAVE TO FILE");
             return false;
         }
-        gson.toJson(tojson,fileWriter);
         return true;
     }
-
     @Override
     public boolean load(String file)
     {

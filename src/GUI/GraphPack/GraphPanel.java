@@ -37,7 +37,7 @@ public class GraphPanel extends JPanel implements ActionListener {
     private void addComponentsToPane(){
         JTextField saveJTextField = new JTextField("enter save file name here");
         saveJTextField.setActionCommand("-2");
-        saveJTextField.setLocation(Constants.TOOLS_X_ALIGNMENT, 170);
+        saveJTextField.setLocation(Constants.TOOLS_X_ALIGNMENT, 50);
         saveJTextField.setBackground(Color.blue);
         saveJTextField.setSize(Constants.TEXT_FIELD_SIZE);
         saveJTextField.addActionListener(this);
@@ -193,7 +193,10 @@ public class GraphPanel extends JPanel implements ActionListener {
          */
         switch(x){
             case -2:
-                RunGui.getDwg_algo().save()
+                JTextField tf = (JTextField) e.getSource();
+                String file = tf.getText();
+                RunGui.getDwg_algo().save(file);
+                break;
             case -1:
                 RunGui.swapFrame(1);
                 break;
@@ -231,6 +234,7 @@ public class GraphPanel extends JPanel implements ActionListener {
                     RunGui.ShowMessage("Graph is not Connected!");
                 break;
             case 4:
+
                 break;
             case 5:
                 break;
