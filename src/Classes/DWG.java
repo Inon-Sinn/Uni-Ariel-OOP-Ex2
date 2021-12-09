@@ -11,12 +11,12 @@ import java.util.Iterator;
  */
 public class DWG implements api.DirectedWeightedGraph {
 
-    int mc=0;
-    int nextKeyEdge;
+    private int mc=0;
+    private int nextKeyEdge;
     @SerializedName("Nodes")
-    HashMap<Integer, api.NodeData> nodes;
+    private HashMap<Integer, api.NodeData> nodes;
     @SerializedName("Edges")
-    HashMap<Integer, api.EdgeData> edges;
+    private HashMap<Integer, api.EdgeData> edges;
 
     /**
      * create new Directed Weighted Graph

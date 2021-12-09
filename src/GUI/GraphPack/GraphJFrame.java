@@ -9,7 +9,7 @@ import java.awt.*;
 public class GraphJFrame extends JFrame{
 
     public GraphJFrame(){
-        GraphPanel myPanel = new GraphPanel(new DWG());
+        GraphPanel myPanel = new GraphPanel();
         this.add(myPanel);
 
         setConstants();

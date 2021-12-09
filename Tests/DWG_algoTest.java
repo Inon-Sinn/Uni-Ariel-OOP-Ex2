@@ -40,14 +40,39 @@ class DWG_algoTest {
         graph1.connect(n1.getKey(),n2.getKey(),5);
         DWG_algo algo1 = new DWG_algo();
         algo1.init(graph1);
+        DWG copy = (DWG) algo1.copy();
+        assertEquals(copy.nodeSize(),3);
+        assertEquals(copy.edgeSize(),1);
+        assertEquals(copy.getEdge(n1.getKey(),n2.getKey()).getWeight(),5);
     }
 
     @Test
     void reverseCopy() {
+        graph1.addNode(n1);
+        graph1.addNode(n2);
+        graph1.addNode(n3);
+        graph1.connect(n1.getKey(),n2.getKey(),5);
+        DWG_algo algo1 = new DWG_algo();
+        algo1.init(graph1);
+        DWG Reverse_copy = (DWG) algo1.ReverseCopy();
+        assertEquals(Reverse_copy.nodeSize(),3);
+        assertEquals(Reverse_copy.edgeSize(),1);
+        assertNull(Reverse_copy.getEdge(n1.getKey(),n2.getKey()));
+        assertEquals(Reverse_copy.getEdge(n2.getKey(),n1.getKey()).getWeight(),5);
     }
 
     @Test
     void isConnected() {
+        graph1.addNode(n1);
+        graph1.addNode(n2);
+        graph1.addNode(n3);
+        DWG_algo algo1 = new DWG_algo();
+        algo1.init(graph1);
+        assertFalse(algo1.isConnected());
+        graph1.connect(n1.getKey(),n2.getKey(),5);
+        graph1.connect(n2.getKey(),n1.getKey(),5);
+        algo1.init(graph1);
+        assertFalse(algo1.isConnected());
     }
 
     @Test

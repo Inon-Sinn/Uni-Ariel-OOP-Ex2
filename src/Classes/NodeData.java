@@ -11,7 +11,8 @@ import java.util.HashMap;
 /**
  * This class represents a single Node in the graph, the parameters that describe the node are:
  * id - int - the id of the node, the key used in the hashmap of all nodes
- * pos - GeoLoc - the placement of the node
+ * pos - String - the String representing a GeoLocation we got in the json
+ * geoLoc - GeoLoc - the placement of the node
  * edgesConnected - HashMap<Integer, api.EdgeData> - a hash map holding all edges going out from this node
  * pointing_to_me - ArrayList<Integer> - all ids of the nodes having an edge pointing to this node
  * info - String - The Meta-data describing the edge
@@ -19,17 +20,16 @@ import java.util.HashMap;
  * tag - int - Temporal data (aka color: e,g, white, gray, black)  represented as a number
  */
 public class NodeData implements api.NodeData, Comparator {
+
     @SerializedName("id")
     private int id;
     @SerializedName("pos")
     private String pos = "";
     private GeoLoc geoLoc;
-
     private HashMap<Integer, api.EdgeData> edgesConnected;
     private ArrayList<Integer> pointing_to_me = new ArrayList<>();
-
     private String info;
-    private double weight = Double.POSITIVE_INFINITY; //default 0
+    private double weight = Double.POSITIVE_INFINITY; //default positive infinite
     private int tag = 0; //default 0
     //
 

@@ -5,9 +5,9 @@ package Classes;
  */
 public class GeoLoc implements api.GeoLocation {
 
-    double x;
-    double y;
-    double z;
+    private double x;
+    private double y;
+    private double z;
 
     public GeoLoc(double x, double y, double z){
         this.x = x;

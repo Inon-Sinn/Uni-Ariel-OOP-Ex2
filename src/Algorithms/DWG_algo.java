@@ -37,15 +37,15 @@ public class DWG_algo implements api.DirectedWeightedGraphAlgorithms{
         DWG copy= new DWG();
         Iterator<api.NodeData> itNodes = this.graph.nodeIter();
         while(itNodes.hasNext()){
-            itNodes.next();
-            copy.addNode((api.NodeData)itNodes);
+            NodeData nodeData = itNodes.next();
+            copy.addNode(nodeData);
         }
         Iterator<api.EdgeData> itEdges = this.graph.edgeIter();
         while(itEdges.hasNext()){
-            itEdges.next();
-            int src = ((EdgeData)itEdges).getSrc();
-            int dest = ((EdgeData)itEdges).getDest();
-            double w = ((EdgeData)itEdges).getWeight();
+            EdgeData e = (EdgeData) itEdges.next();
+            int src = e.getSrc();
+            int dest = e.getDest();
+            double w = e.getWeight();
             copy.connect(src,dest,w);
         }
         return copy;
@@ -55,16 +55,16 @@ public class DWG_algo implements api.DirectedWeightedGraphAlgorithms{
         DWG copy= new DWG();
         Iterator<api.NodeData> itNodes = this.graph.nodeIter();
         while(itNodes.hasNext()){
-            itNodes.next();
-            copy.addNode((api.NodeData)itNodes);
+            NodeData nodeData = itNodes.next();
+            copy.addNode((api.NodeData)nodeData);
         }
         Iterator<api.EdgeData> itEdges = this.graph.edgeIter();
         while(itEdges.hasNext()){
-            itEdges.next();
-            int src = ((EdgeData)itEdges).getDest();
-            int dest = ((EdgeData)itEdges).getSrc();
-            double w = ((EdgeData)itEdges).getWeight();
-            copy.connect(src,dest,w);
+            EdgeData e = (EdgeData) itEdges.next();
+            int src = e.getSrc();
+            int dest = e.getDest();
+            double w = e.getWeight();
+            copy.connect(dest,src,w);
         }
         return copy;
     }

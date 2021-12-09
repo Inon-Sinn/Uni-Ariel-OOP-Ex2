@@ -4,30 +4,24 @@ import Algorithms.DWG_algo;
 import Classes.DWG;
 import Classes.EdgeData;
 import Classes.GeoLoc;
-import Classes.NodeData;
 import GUI.GraphPack.GraphJFrame;
 import GUI.MenuPack.MenuJFrame;
-
 import java.awt.*;
 import java.awt.geom.Ellipse2D;
-
 import GUI.support.Arrow2D;
-import api.GeoLocation;
-import org.w3c.dom.Node;
-import org.w3c.dom.ranges.Range;
-
 import javax.swing.*;
 import java.awt.geom.Point2D;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Iterator;
 
 public class RunGui {
+
     private static String Json;
     private static MenuJFrame Menu;
     private static GraphJFrame GraphJFrame;
     private static Double Maximumx=null,Minimumx=null,Maximumy=null,Minimumy=null;
     private static DWG_algo dwg_algo = new DWG_algo();
+
     public static void main(String[] args){
         Menu = new MenuJFrame();
     }
@@ -45,6 +39,7 @@ public class RunGui {
               terminate(0);
               // load with json in constructor
               GraphJFrame = new GraphJFrame();
+              setRange();
               break;
           case 1:
               terminate(1);
@@ -113,7 +108,7 @@ public class RunGui {
         }
     }
 
-    private static void setRange(){
+    public static void setRange(){
         Double minimumX=null, maximumX=null,
                 minimumY=null, maximumY=null;
         Iterator<api.NodeData> iterator = dwg_algo.getGraph().nodeIter();
@@ -141,18 +136,13 @@ public class RunGui {
         Minimumy = minimumY;
         Maximumy = maximumY;
     }
-    public static Iterator<Ellipse2D> getNodesIteratorFromDWG(){
-        Iterator<api.NodeData> iterator = dwg_algo.getGraph().nodeIter();
-        ArrayList<Ellipse2D> nodes = new ArrayList<Ellipse2D>();
-        while(iterator.hasNext()){
-            GeoLoc nodeLoc = (GeoLoc) iterator.next().getLocation();
-            Point2D.Double curPoint = convertFromRangeToCanvas(new Point2D.Double(nodeLoc.x(), nodeLoc.y()));
-            Ellipse2D node = new Ellipse2D.Double(curPoint.x, curPoint.y,
-                    Constants.NODE_WIDTH,Constants.NODE_HEIGHT);
-            nodes.add(node);
-        }
-        return nodes.iterator();
-    }
+
+    /**
+     * This function returns a Point which represents where the given point
+     * should be allocated in the Canvas
+     * @param point
+     * @return
+     */
     public static Point2D.Double convertFromRangeToCanvas(Point2D.Double point){
         double xRatio = ratioX(point.x),
                 yRatio = ratioY(point.y);
@@ -160,22 +150,19 @@ public class RunGui {
                 yPos = Constants.NODE_HEIGHT + yRatio * (Constants.CANVAS_HEIGHT - 2*Constants.NODE_HEIGHT);
         return new Point2D.Double(xPos,yPos);
     }
-
-    public static Iterator<Arrow2D> getEdgesIteratorFromDWG(){
-        Iterator<api.EdgeData> iterator = dwg_algo.getGraph().edgeIter();
-        DWG dwg = (DWG) dwg_algo.getGraph();
-        ArrayList<Arrow2D> arrow2DS = new ArrayList<Arrow2D>();
-        while(iterator.hasNext()){
-            EdgeData edgeData = (EdgeData) iterator.next();
-            GeoLoc srcLoc = (GeoLoc) dwg.getNode(edgeData.getSrc()).getLocation();
-            GeoLoc destLoc = (GeoLoc) dwg.getNode(edgeData.getDest()).getLocation();
-            Point2D.Double srcPoint = convertFromRangeToCanvas(new Point2D.Double(srcLoc.x(),srcLoc.y()));
-            Point2D.Double destPoint = convertFromRangeToCanvas(new Point2D.Double(destLoc.x(),destLoc.y()));
-            arrow2DS.add(new Arrow2D(srcPoint,destPoint));
-        }
-        return arrow2DS.iterator();
+    public static Point2D.Double convertFromRatioToRange(Point2D.Double point){
+        double rangeX = Maximumx - Minimumx,
+                rangeY = Maximumy - Minimumy;
+        Point2D.Double point2D = new Point2D.Double(Minimumx + rangeX * point.x,
+                Minimumy + rangeY * point.y);
+        return point2D;
     }
-
+    public static Point2D.Double convertFromCanvasToRatio(Point2D.Double point){
+        double x = (Constants.CANVAS_WIDTH + 10 - point.x)/Constants.CANVAS_WIDTH,
+                y= (Constants.CANVAS_HEIGHT + 16- point.y)/Constants.CANVAS_HEIGHT;
+        Point2D.Double p = new Point2D.Double(x,y);
+        return p;
+    }
     public static void setJson(String json){
         Json = json;
     }
