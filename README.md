@@ -80,7 +80,7 @@ We do this using a greedy algorithem, we start from the first city, the next cit
 Test exists but we wont shown them here
 
 ### UML
-
+![alt text](https://github.com/Inon-Sinn/Uni-Ariel-OOP-Ex2/blob/master/complete.png)
 
 ### GUI
 
