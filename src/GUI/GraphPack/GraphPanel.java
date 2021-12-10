@@ -14,6 +14,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Point2D;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Iterator;
 public class GraphPanel extends JPanel implements ActionListener, MouseListener {
@@ -46,14 +47,23 @@ public class GraphPanel extends JPanel implements ActionListener, MouseListener 
         RunGui.getDwg_algo().getGraph().connect(edgeData.getSrc(), edgeData.getDest(), edgeData.getWeight());
         myCanvas.repaint();
     }
+    private void deleteNode(int id){
+        RunGui.getDwg_algo().getGraph().removeNode(id);
+        RunGui.setRange();
+        myCanvas.repaint();
+    }
+    private void deleteEdge(int src, int dest){
+        RunGui.getDwg_algo().getGraph().removeEdge(src, dest);
+        myCanvas.repaint();
+    }
     @Override
     public void mouseClicked(MouseEvent e) {
         if(e.getX() < Constants.CANVAS_WIDTH && e.getX() >= 10 &&
                 e.getY()<Constants.CANVAS_HEIGHT && e.getY() >= 16){
             Point2D.Double ratioPoint = RunGui.convertFromCanvasToRatio(new Point2D.Double(e.getX(),e.getY()));
             Point2D.Double point = RunGui.convertFromRatioToRange(ratioPoint);
-            xTextField.setText(point.x+"");
-            yTextField.setText(point.y+"");
+            DecimalFormat df = new DecimalFormat("#.######");
+            xTextField.setText(df.format(point.x)+"," + df.format(point.y));
             instructionsLabel.setText("Updated selected x and y data by click! \n " +
                     "values selected are : \n X = " + point.x + "\n" +
                     " , Y = " + point.y);
@@ -87,14 +97,17 @@ public class GraphPanel extends JPanel implements ActionListener, MouseListener 
          * case -2 stands for user clicking to save the graph
          * case -1 stands for user clicking to go back
          * case 0 stands for the user wanting to update the Node
-         * case 1 stands for the user wanting to update the X value of the Node
-         * case 2 stands for the user wanting to update the Y value of the Node
+         * case 1 stands for the user wanting to update the X value and y value of a node
+         * case 2 stands for the user wanting to delete specific node
          * case 3 for is connected
          * case 4 for  tsp
          * case 5 for shortest path
          * case 6 for Center
          *
          * case 8 for addEdge
+         * case 9 for infoFrame
+         * case 10 for deleteNode
+         * case 11 for deleteEdge
          */
         switch(x){
             case -2:
@@ -107,8 +120,10 @@ public class GraphPanel extends JPanel implements ActionListener, MouseListener 
                 break;
             case 0:
                 try{
-                    this.x = Double.parseDouble(this.xTextField.getText());
-                    this.y = Double.parseDouble(this.yTextField.getText());
+                    String str = xTextField.getText().trim();
+                    String[] s = str.split(",");
+                    this.x = Double.parseDouble(s[0]);
+                    this.y = Double.parseDouble(s[1]);
                 }
                 catch(NumberFormatException exception){
                     xTextField.setText("Wrong input");
@@ -123,25 +138,26 @@ public class GraphPanel extends JPanel implements ActionListener, MouseListener 
                 instructionsLabel.setText("You've added a New Node With \n values: X = " + this.x + "\n" +  ", Y = " + this.y);
                 break;
             case 1:
-                JTextField jt = (JTextField)e.getSource();
                 try {
-                    this.x = Double.parseDouble(jt.getText());
-                    this.instructionsLabel.setText("Value of X has changed to :" + this.x);
+                    String str = xTextField.getText().trim();
+                    String[] s = str.split(",");
+                    this.x = Double.parseDouble(s[0]);
+                    this.y = Double.parseDouble(s[1]);
+                    this.instructionsLabel.setText("Value has changed to :" + this.x + "," + this.y);
                     break;
                 }
                 catch(NumberFormatException exception){
-                    jt.setText("Bad Input, nothing changed, try again");
+                    xTextField.setText("Bad Input, nothing changed, try again");
                     break;
                 }
             case 2:
-                JTextField jTextField = (JTextField)e.getSource();
                 try {
-                    this.y = Double.parseDouble(jTextField.getText());
-                    this.instructionsLabel.setText("Value of Y has changed to :" + this.y);
+                    int id = Integer.parseInt(yTextField.getText());
+                    this.instructionsLabel.setText("The ID selected is:" + id);
                     break;
                 }
                 catch(NumberFormatException exception){
-                    jTextField.setText("Bad Input, nothing changed, try again");
+                    yTextField.setText("Bad Input, nothing changed, try again");
                     break;
                 }
             case 3:
@@ -216,7 +232,7 @@ public class GraphPanel extends JPanel implements ActionListener, MouseListener 
                 String s = l.trim();
                 String[] str = s.split(",");
                 try{
-                    if(str.length < 3 || str.length == 0){
+                    if(str.length < 3 || str.length == 0 || str.length >= 4){
                         throw new NumberFormatException("Cant Determinate src,dest,weight");
                     }
                     int src = Integer.parseInt(str[0]),
@@ -239,6 +255,45 @@ public class GraphPanel extends JPanel implements ActionListener, MouseListener 
             case 9:
                 new GraphInfoFrame();
                 break;
+            case 10:
+                try{
+                    int ID = Integer.parseInt(yTextField.getText());
+                    deleteNode(ID);
+                    instructionsLabel.setText("You have Deleted Node : " + ID);
+                }
+                catch (NumberFormatException exce1){
+                    yTextField.setText(exce1.getMessage());
+                    instructionsLabel.setText("Wrong input");
+                }
+                break;
+            case 11:
+                String str2 = this.edgeDataJTextField.getText().trim();
+                String[] l1 = str2.split(",");
+                try{
+                    if(l1.length == 3){
+                        throw new NumberFormatException("weight is not needed");
+                    }
+                    else if(l1.length > 3){
+                        throw new NumberFormatException("not valid input");
+                    }
+                    else if(l1.length < 2 || l1.length == 0){
+                        throw new NumberFormatException("src or dest missing");
+                    }
+                    int src = Integer.parseInt(l1[0]),
+                    dest = Integer.parseInt(l1[1]);
+                    EdgeData edgeData = (EdgeData) RunGui.getDwg_algo().getGraph().getEdge(src,dest);
+                    if(edgeData == null){
+                        throw new NumberFormatException("Non existent edge try again");
+                    }
+                    deleteEdge(src,dest);
+                    instructionsLabel.setText(" Edge from " + src + " to " +  dest + " Deleted Succesfully!!");
+                }
+                catch(NumberFormatException exce2){
+                    this.edgeDataJTextField.setText(exce2.getMessage());
+                    instructionsLabel.setText("Wrong data entered");
+                }
+                break;
+
             default:
                 break;
         }
@@ -290,14 +345,22 @@ public class GraphPanel extends JPanel implements ActionListener, MouseListener 
         /** This button reads from two JTextfields  and adds a new Node to the graph*/
         addNodeButton = new JButton("Add Node");
         addNodeButton.setActionCommand("0");
-        addNodeButton.setSize(Constants.BUTTON_SIZE);
+        addNodeButton.setSize((Constants.BUTTON_SIZE.width),(Constants.BUTTON_SIZE.height/2));
         addNodeButton.setLocation(Constants.BUTTONS_X_ALIGNMENT, 100);
+        addNodeButton.addActionListener(this);
+        this.add(addNodeButton);
+
+        /** This Button Deletes a node */
+        addNodeButton = new JButton("Delete Node");
+        addNodeButton.setActionCommand("10");
+        addNodeButton.setSize((Constants.BUTTON_SIZE.width),(Constants.BUTTON_SIZE.height/2));
+        addNodeButton.setLocation(Constants.BUTTONS_X_ALIGNMENT, 125);
         addNodeButton.addActionListener(this);
         this.add(addNodeButton);
 
         /** These JText Fields designed to understand at which specific location the user
          * wants to add a new node. */
-        xTextField = new JTextField("Enter only X");
+        xTextField = new JTextField("Enter x,y separated by ,");
         xTextField.setActionCommand("1");
         xTextField.setLocation(Constants.JTEXT_X_ALIGNMENT, 100);
         xTextField.setFont(font);
@@ -305,7 +368,7 @@ public class GraphPanel extends JPanel implements ActionListener, MouseListener 
         xTextField.addActionListener(this);
         this.add(xTextField);
 
-        yTextField = new JTextField("Enter only Y");
+        yTextField = new JTextField("Enter id for delete");
         yTextField.setActionCommand("2");
         yTextField.setLocation(Constants.JTEXT_X_ALIGNMENT, 120);
         yTextField.setFont(font);
@@ -316,12 +379,19 @@ public class GraphPanel extends JPanel implements ActionListener, MouseListener 
         /**This Button supposed to add(AddEdge) a new Edge between two nodes */
         addEdgeButton = new JButton("Add Edge");
         addEdgeButton.setActionCommand("8");
-        addEdgeButton.setSize(Constants.BUTTON_SIZE);
+        addEdgeButton.setSize(Constants.BUTTON_SIZE.width,Constants.BUTTON_SIZE.height/2);
         addEdgeButton.setLocation(Constants.BUTTONS_X_ALIGNMENT, 180);
         addEdgeButton.addActionListener(this);
         this.add(addEdgeButton);
+        /** This Button supposed to deleteEdge  */
+        addEdgeButton = new JButton("Delete Edge");
+        addEdgeButton.setActionCommand("11");
+        addEdgeButton.setSize(Constants.BUTTON_SIZE.width,Constants.BUTTON_SIZE.height/2);
+        addEdgeButton.setLocation(Constants.BUTTONS_X_ALIGNMENT, 205);
+        addEdgeButton.addActionListener(this);
+        this.add(addEdgeButton);
         /**This JTextField supposed to receive src node id and destination node id (edgeDataJTextField) */
-        edgeDataJTextField = new JTextField("Src and Dest separated by ,");
+        edgeDataJTextField = new JTextField("Src,Dest,weight separated by ,");
         edgeDataJTextField.setActionCommand("9");
         edgeDataJTextField.setSize(Constants.TEXT_FIELD_SIZE);
         edgeDataJTextField.setFont(font);
@@ -354,7 +424,7 @@ public class GraphPanel extends JPanel implements ActionListener, MouseListener 
         this.add(tspButton);
 
         /**This TextField represents the cities the user needs to apply to run tsp */
-        tspJTextField = new JTextField("Enter Cities by ID");
+        tspJTextField = new JTextField("Enter Cities by ID separated by ,");
         tspJTextField.setActionCommand("7");
         tspJTextField.setLocation(Constants.JTEXT_X_ALIGNMENT, 380);
         tspJTextField.setSize(Constants.TEXT_FIELD_SIZE);
@@ -370,7 +440,7 @@ public class GraphPanel extends JPanel implements ActionListener, MouseListener 
         shortButton.addActionListener(this);
         this.add(shortButton);
         /**This JTextField gets source id and dest id of the nodes the user wants shortpath algo to work on*/
-        ShortPathJTextField = new JTextField("Enter Src id and Dest id separated by , ");
+        ShortPathJTextField = new JTextField("Enter SrcID,destID separated by , ");
         ShortPathJTextField.setActionCommand("8");
         ShortPathJTextField.setLocation(Constants.JTEXT_X_ALIGNMENT, 460);
         ShortPathJTextField.setSize(Constants.TEXT_FIELD_SIZE);
@@ -424,9 +494,9 @@ public class GraphPanel extends JPanel implements ActionListener, MouseListener 
 
                     // drawing the ellipse with id
                     g1.setColor(new Color(60,160,236));
-                    g1.setFont(new Font("dhsah", Font.BOLD, 15));
+                    g1.setFont(new Font("dhsah", Font.BOLD, Constants.STRING_SIZE));
                     g1.drawString(""+nodeData.getKey(), (float)node.getX(), (float)node.getY());
-                    //g1.fill(node);
+                    g1.fill(node);
                     g1.draw(node);
                 }
 
