@@ -10,6 +10,7 @@ import com.google.gson.annotations.SerializedName;
  * info - String - The Meta data describing the edge
  * tag - int - Temporal data (aka color: e,g, white, gray, black)  represented as a number
  * id - int - the id of the edge, aka the key used in the hashmap of all edges
+ * isColored
  */
 public class EdgeData implements api.EdgeData {
 
@@ -23,6 +24,7 @@ public class EdgeData implements api.EdgeData {
     private int tag = 0; //default 0
     //auxiliary
     private final int id;
+
 
     /**
      * The Builder of the edge class gets src,dest, weight and id
@@ -42,7 +44,6 @@ public class EdgeData implements api.EdgeData {
     public  int getId(){
         return this.id;
     }
-
     @Override
     public int getSrc() {
         return this.src;

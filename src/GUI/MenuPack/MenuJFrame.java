@@ -1,5 +1,7 @@
 package GUI.MenuPack;
 
+import GUI.Constants;
+
 import javax.swing.*;
 import java.awt.*;
 
@@ -16,6 +18,7 @@ public class MenuJFrame extends JFrame {
         this.setTitle("Menu");
         this.setSize(this.dimension);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        this.setLocation(Constants.SCREEN_DIMENSION.width/3, Constants.SCREEN_DIMENSION.height/3);
         this.setVisible(true);
         this.setResizable(false);
     }
