@@ -19,15 +19,15 @@ import java.util.HashMap;
  * weight - double - weight of the node
  * tag - int - Temporal data (aka color: e,g, white, gray, black)  represented as a number
  */
-public class NodeData implements api.NodeData, Comparator {
+public class NodeData implements api.NodeData, Comparable{
 
     @SerializedName("id")
-    private int id;
+    private final int id;
     @SerializedName("pos")
-    private String pos = "";
+    private final String pos = "";
     private GeoLoc geoLoc;
     private HashMap<Integer, api.EdgeData> edgesConnected;
-    private ArrayList<Integer> pointing_to_me = new ArrayList<>();
+    private final ArrayList<Integer> pointing_to_me = new ArrayList<>();
     private String info;
     private double weight = Double.POSITIVE_INFINITY; //default positive infinite
     private int tag = 0; //default 0
@@ -159,12 +159,14 @@ public class NodeData implements api.NodeData, Comparator {
     }
 
     @Override
-    public int compare(Object o1, Object o2) {
-        NodeData n1 = (NodeData) o1;
-        NodeData n2 = (NodeData) o2;
-        if (n1.getWeight() < n2.getWeight())
+    public int compareTo(Object o) {
+        NodeData n1 = (NodeData) o;
+        if(n1 == null){
             return -1;
-        if (n2.getWeight() > n2.getWeight())
+        }
+        if (weight < n1.getWeight())
+            return -1;
+        if (weight > n1.getWeight())
             return 1;
         return 0;
     }

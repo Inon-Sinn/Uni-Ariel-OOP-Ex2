@@ -14,9 +14,9 @@ public class DWG implements api.DirectedWeightedGraph {
     private int mc=0;
     private int nextKeyEdge;
     @SerializedName("Nodes")
-    private HashMap<Integer, api.NodeData> nodes;
+    private final HashMap<Integer, api.NodeData> nodes;
     @SerializedName("Edges")
-    private HashMap<Integer, api.EdgeData> edges;
+    private final HashMap<Integer, api.EdgeData> edges;
 
     /**
      * create new Directed Weighted Graph

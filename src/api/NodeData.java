@@ -1,11 +1,11 @@
 package api;
-
+import java.lang.Comparable;
 /**
  * This interface represents the set of operations applicable on a 
  * node (vertex) in a (directional) weighted graph.
  * @author boaz.benmoshe
  */
-public interface NodeData {
+public interface NodeData extends Comparable{
 	/**
 	 * Returns the key (id) associated with this node.
 	 * @return

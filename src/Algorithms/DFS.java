@@ -12,6 +12,9 @@ public class DFS {
     private HashMap<Integer,Integer> f = new HashMap<>();
     private HashMap<Integer,Integer> d = new HashMap<>();
     private HashMap<Integer,Integer> prev = new HashMap<>();
+    private static final int white = 0;
+    private static final int gray = 012;
+    private static final int black = 0;
     // colors tag =0 - white, tag =1 - gray, tage=2 - black
 
     public DFS(DWG g){
@@ -24,12 +27,12 @@ public class DFS {
         while(white_node_it.hasNext()){
             NodeData curr = (NodeData)white_node_it.next();
             if(curr.getTag()==0)
-        DFS_visit(curr.getKey(),time);
+                time = DFS_visit(curr.getKey(),time);
         }
 
     }
 
-    public void DFS_visit(int id,int time){
+    public int DFS_visit(int id,int time){
         graph.getNode(id).setTag(1);
         time++;
         d.put(id,time);
@@ -38,12 +41,13 @@ public class DFS {
             int dest_id = edge_it.next().getDest();
             if(graph.getNode(dest_id).getTag()==0){
                 prev.put(dest_id,id);
-                DFS_visit(dest_id,time);
+                time = DFS_visit(dest_id,time);
             }
         }
         graph.getNode(id).setTag(2);
         time++;
         f.put(id,time);
+        return time;
     }
 
     //return true if the graph itself is empty
