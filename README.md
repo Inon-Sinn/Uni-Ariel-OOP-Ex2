@@ -89,6 +89,7 @@ Test exists but we wont shown them here
 ### GUI
 Graphical User Interface which represents the project done by visual detail and allows the user to 
 interact with the graph, play with the algorithms. The GUI allowed us a better tool, which was used to test the algorithms more efficiently.
+![alt text](https://github.com/Inon-Sinn/Uni-Ariel-OOP-Ex2/blob/master/git_help_2.PNG)
 
 ### Results
 
