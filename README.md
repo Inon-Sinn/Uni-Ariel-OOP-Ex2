@@ -5,7 +5,10 @@ In this assignment we were given a json file and had using it, to implement a Di
 In Addition we were given a list of algorithms that we had to implement and then showcase all of it using GUI
 
 ### How to run
-Use the jar???
+Find The Jar called Ex2.jar
+open terminal, and type the following: java -jar Ex2.jar argument
+Note that the argument should be replaced with the file name like "G1.json" which is located at data folder.
+**IF THE FILE IS NOT LOCATED INSIDE THE DATA FOLDER THE JAR WILL NOT FIND IT.**
 
 ### Our Idea
 We implmented the directive weighted graph using 2 hashmaps,<br/>
@@ -70,22 +73,22 @@ We do this using a greedy algorithem, we start from the first city, the next cit
 
 | GUI| Descripition |
 | ---------- | --------- |
-| GraphJFrame |  |
-| GraphPanel |   |
-| MenuJFrame |    |
-| MenuPanel |    |
-| Arrow2D |    |
-| Constants |    |
-| Run Gui |    |
+| GraphJFrame | JFrame which contains the lightweight component which holds the graph  |
+| GraphPanel | JPanel which contains all the user program interfaces and graphics for the Graph itself |
+| MenuJFrame | A menu JFrame which contains the lightweight component which holds the menu interface |
+| MenuPanel | A JPanel which contains comboBox interface that allows the user to select a file and load a file from the data folder using a Jbutton |
+| Arrow2D | A Shape class which extends 2DPath, it represents a directed edge ( --> ) |
+| Constants | A class containing static final contants which each UI is built by |
+| Run Gui | A class which is a control center. Each operation to switch frames or change ranges of the canvas goes through "Run Gui"  |
 
 Test exists but we wont shown them here
 
 ### UML
 ![alt text](https://github.com/Inon-Sinn/Uni-Ariel-OOP-Ex2/blob/master/complete.png)
-Yes, I have a live!!
 
 ### GUI
-
+Graphical User Interface which represents the project done by visual detail and allows the user to 
+interact with the graph, play with the algorithms. The GUI allowed us a better tool, which was used to test the algorithms more efficiently.
 
 ### Results
 
