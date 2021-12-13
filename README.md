@@ -66,6 +66,7 @@ We do this using a greedy algorithem, we start from the first city, the next cit
 | DWG_algo | hold all the listed algorithems and the way to load and save a json file of a graph,</br> Implements the DirectedWeightedGraphAlgorithms interface |
 | Dijkstra  | Implements the Dijjstra Algorithm  |
 | DFS |  Implements the DFS Algorithm  |
+| MinHeap |  Impletments a min heap  |
 
 | GUI| Descripition |
 | ---------- | --------- |
@@ -81,8 +82,21 @@ Test exists but we wont shown them here
 
 ### UML
 ![alt text](https://github.com/Inon-Sinn/Uni-Ariel-OOP-Ex2/blob/master/complete.png)
+Yes, I have a live!!
 
 ### GUI
+
+
+### Results
+
+| NodeSize| Construction |isConnected|shortestPath|shortestPathDist|center|tsp|
+| ---------- | --------- |--------- | --------- |--------- | --------- |--------- |
+| 100 |||||||
+| 1,000 |||||||
+| 10,000 |||||||
+| 100,000 |||||||
+| 1,000,000 |||||||
+
 
 
 
