@@ -93,17 +93,17 @@ interact with the graph, play with the algorithms. The GUI allowed us a better t
 
 ### Results
 
-| NodeSize| Construction |isConnected|shortestPath|shortestPathDist|center|tsp|
+| NodeSize| Construction |isConnected|shortestPath|shortestPathDist|center|tsp: 5 nodes|
 | ---------- | --------- |--------- | --------- |--------- | --------- |--------- |
-| G1 |||||||
-| G2 |||||||
-| G3 |||||||
-| 1,000 |||||||
-| 10,000 |||||||
-| 100,000 |||||||
+| G1 |131 ms|0.42 ms|0.245 ms|0.245 ms|5.57 ms|7 ms|
+| G2 |21 ms|0.31 ms|0.155 ms|0.155 ms|11.75 ms|4.25 ms|
+| G3 |56 ms|0.435 ms|0.435 ms|0.435 ms|10.5 ms|20.5 ms|
+| 1,000 |522 ms| 11.25 ms|8.53 ms|8.53 ms|6s|176 ms|
+| 10,000 |684 ms|178.5 ms|337.4 ms|337.4 ms|aprox: 56.23 min|3.6 s|
+| 100,000 |13 s|8.286 s|45 s|45 s|approx 52 days|80 min|
 
 
-
+Written by: Inon Sinn, yan naigebaver, yaron Syrota
 
 
 
