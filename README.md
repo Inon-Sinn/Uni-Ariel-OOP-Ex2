@@ -95,11 +95,12 @@ interact with the graph, play with the algorithms. The GUI allowed us a better t
 
 | NodeSize| Construction |isConnected|shortestPath|shortestPathDist|center|tsp|
 | ---------- | --------- |--------- | --------- |--------- | --------- |--------- |
-| 100 |||||||
+| G1 |||||||
+| G2 |||||||
+| G3 |||||||
 | 1,000 |||||||
 | 10,000 |||||||
 | 100,000 |||||||
-| 1,000,000 |||||||
 
 
 
